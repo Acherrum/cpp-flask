@@ -1,7 +1,6 @@
 #include "cppflask/html/HtmlBuilder.h"
 
 #include <fstream>
-#include <iostream>
 
 #include "cppflask/html/nodes/Node.h"
 #include "cppflask/html/nodes/HtmlNode.h"
@@ -14,7 +13,6 @@
 #include "cppflask/html/HtmlCommand.h"
 
 #include "cppflask/JsonObject.h"
-#include "cppflask/html/StringHelper.h"
 
 using cppflask::JsonObject;
 using cppflask::html::HtmlCommand;
