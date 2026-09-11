@@ -4,28 +4,36 @@
 
 #include "httplib/httplib.h"
 
-#include "cppflask/IRouter.h"
+#include "cppflask/IRoute.h"
 #include "cppflask/JsonObject.h"
 
 namespace {
 
-    cppflask::JsonObject generateDataFromRequest(const httplib::Request& req) {
-        auto jsonString = std::string{"{"};
-        jsonString += "\"path\": \"" + req.path + "\",";
-        jsonString += "\"body\": \"" + req.body + "\",";
-        jsonString += "\"form\": {";
-            for (const auto& field : req.form.fields) {
-                jsonString += "\"" + field.second.name + "\": \"" + field.second.content + "\",";
-            }
-        if (jsonString.back() == ',') {
-            jsonString.back() = ' ';
+cppflask::JsonObject generateDataFromRequest(const httplib::Request& req) {
+    auto jsonString = std::string{"{"};
+    jsonString += "\"path\": \"" + req.path + "\",";
+    jsonString += "\"body\": \"" + req.body + "\",";
+    jsonString += "\"get\": {";
+        for (const auto& field : req.params) {
+            jsonString += "\"" + field.first + "\": \"" + field.second + "\",";
         }
-        jsonString += "}";
-        return cppflask::JsonObject{jsonString + "}"};
-
+    if (jsonString.back() == ',') {
+        jsonString.back() = ' ';
     }
+    jsonString += "},";
+    jsonString += "\"form\": {";
+        for (const auto& field : req.form.fields) {
+            jsonString += "\"" + field.second.name + "\": \"" + field.second.content + "\",";
+        }
+    if (jsonString.back() == ',') {
+        jsonString.back() = ' ';
+    }
+    jsonString += "}";
+    return cppflask::JsonObject{jsonString + "}"};
 
-    void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router) {
+}
+
+void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const std::string& prefix = "/") {
 
     for (const auto& route : router.getRoutes()) {
         auto handleRoute = [&](const httplib::Request& req, httplib::Response& res) {
@@ -39,16 +47,20 @@ namespace {
 
         switch (route->getType()) {
             case cppflask::RouteType::GET: {
-                server.Get("/" + route->getName(), handleRoute);
+                server.Get(prefix + route->getName(), handleRoute);
                 break;
             }
             case cppflask::RouteType::POST: {
-                server.Post("/" + route->getName(), handleRoute);
+                server.Post(prefix + route->getName(), handleRoute);
                 break;
             }
         }
+
+        if (!route->getRoutes().empty()) {
+            setUpRoutes(server, *route, prefix + route->getName() + '/');
+        }
     }
-    }
+}
 }
 
 namespace cppflask {

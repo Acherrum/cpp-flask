@@ -5,6 +5,7 @@ add_library(${LIBRARY_NAME}
         src/Router.cpp
         src/HomeRoute.cpp
         src/HelloRoute.cpp
+        src/PingPongRoute.cpp
 )
 
 target_include_directories(${LIBRARY_NAME}

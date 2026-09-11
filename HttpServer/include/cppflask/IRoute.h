@@ -1,9 +1,9 @@
 #pragma once
 
+#include "cppflask/IRouter.h"
+
 #include <string>
-#include <vector>
 #include <unordered_map>
-#include <memory>
 
 #include "cppflask/JsonObject.h"
 
@@ -12,16 +12,15 @@ namespace cppflask {
         GET, POST
     };
 
-    class IRoute {
+    class IRoute : public IRouter {
     public:
-        virtual ~IRoute() = default;
+        ~IRoute() override = default;
 
-        virtual RouteType getType() const = 0;
-        virtual const std::string& getName() const = 0;
-        virtual const std::string& getContentType() const = 0;
-        virtual const std::unordered_map<std::string, std::string>& getHeaders() const = 0;
-        virtual const std::vector<std::unique_ptr<IRoute>>& getRoutes() const = 0;
+        [[nodiscard]] virtual RouteType getType() const = 0;
+        [[nodiscard]] virtual const std::string& getName() const = 0;
+        [[nodiscard]] virtual const std::string& getContentType() const = 0;
+        [[nodiscard]] virtual const std::unordered_map<std::string, std::string>& getHeaders() const = 0;
 
-        virtual std::string generatePage(cppflask::JsonObject& requestData) = 0;
+        virtual std::string generatePage(JsonObject& requestData) = 0;
     };
 }

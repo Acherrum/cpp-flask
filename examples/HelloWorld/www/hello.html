@@ -1,13 +1,24 @@
 <html>
 {% INCLUDE(../www/header.html) %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script>
+    function pong(cell_id, value) {
+        var cell = $('#'+cell_id);
+        var text = cell.text();
+        $.get('/hello/ping?cur='+text+'&val=' + value, function(data) {
+            cell.html(data.response);
+        });
+    }
+</script>
 <body>
 <h1>You POSTed!</h1>
 <h3>Hello, {{ $form/name }}</h3>
 You entered the number <b>{{ $form/count }}</b>.<br />
 {% IF ($form/count <= 10) %}<small>You might want to try a higher number, to see something neat.</small><br/>{% END_IF %}
 Let me count that out for you:<br />
-<table>
+<br />
 
+<table style="width:100%;">
 {% SET loopEnd = $form/count + 1%}
 {% FOR (i = 1 TO $loopEnd) %}
     {% SET endOfLine = ($i - 1) % 10 %}
@@ -16,7 +27,7 @@ Let me count that out for you:<br />
 
     {% IF ($endOfLine == 0) %}<tr>{% END_IF %}
 
-    <td>
+    <td style="width:10%;" id="cell-{{ $i }}" onclick="javascript:pong('cell-{{ $i }}', {{ $i }})">
         {% IF ($bold == 0) %}<b>{% END_IF %}
         {% IF ($underlined == 0) %}<u>{% END_IF %}
             {{ $i }}
@@ -28,6 +39,7 @@ Let me count that out for you:<br />
 {% END_FOR %}
 
 </table>
+<small>You can click the bold/underlined numbers too ;)</small><br />
 <br />
 <a href="/">Go back</a>
 </body>
