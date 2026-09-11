@@ -54,7 +54,7 @@ TEST_F(JsonObjectTest, AddBoolValue) {
 
 TEST_F(JsonObjectTest, DealWithNestedObjects) {
 
-    auto object = JsonObject(R"raw({"nested": { "name": "val" }})raw");
+    const auto object = JsonObject(R"raw({"nested": { "name": "val" }})raw");
     auto nested = object.get("nested");
     ASSERT_EQ("val", nested.getValue("name", std::string{}));
     nested.add(std::string{"new"}, 123L);
@@ -64,11 +64,13 @@ TEST_F(JsonObjectTest, DealWithNestedObjects) {
 
     TEST_F(JsonObjectTest, DealWithNestedArrays) {
 
-    auto object = JsonObject(R"raw({"nested":[{"id":1},{"id":2},{"id":3}]})raw");
-    auto array = object.get("nested");
-    for (long i = 0; i < array.getArraySize(); i++) {
-        auto nested = array.get(std::to_string(i));
-        nested.add(std::string{"index"}, i);
+    const auto object = JsonObject(R"raw({"nested":[{"id":1},{"id":2},{"id":3}]})raw");
+    {
+        auto array = object.get("nested");
+        for (long i = 0; i < array.getArraySize(); i++) {
+            auto nested = array.get(std::to_string(i));
+            nested.add(std::string{"index"}, i);
+        }
     }
     ASSERT_EQ(R"raw({"nested":[{"id":1,"index":0},{"id":2,"index":1},{"id":3,"index":2}]})raw", object.toString());
 }

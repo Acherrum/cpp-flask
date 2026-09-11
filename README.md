@@ -77,7 +77,7 @@ Thank you for understanding.
 ## Version history
 
 - **0.2.0** TBD
-  - Finished nested routes
+  - Finished nested routes.
   - Added nested route with JSON response to example.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.
