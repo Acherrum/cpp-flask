@@ -134,11 +134,11 @@ bool JsonObject::getValue(const std::string &key, bool defaultReturnValue) const
     }
     return defaultReturnValue;
 }
-JsonObject JsonObject::get(const std::string& key) {
+JsonObject JsonObject::get(const std::string& key) const {
 
     auto value = getValuePointer(*_pimpl, key);
     if (value != nullptr) {
-        return {std::make_unique<PImpl>(_pimpl->getRoot(), value)};
+        return JsonObject{std::make_unique<PImpl>(_pimpl->getRoot(), value)};
     }
     return {};
 }
