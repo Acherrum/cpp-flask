@@ -1,0 +1,55 @@
+{% IF ($input/0) %}
+
+        {{ $output/0 }}
+
+        {% IF ($input/1) %}
+
+                {{ $output/1 }}
+
+        {% END_IF %}
+
+        {% IF ($input/2) %}
+
+                {{ $output/2 }}
+
+        {% ELSE %}
+
+                {{ $output/3 }}
+
+                {% IF ($input/3) %}
+
+                        {{ $output/4 }}
+
+                {% ELSE IF ($input/4) %}
+
+                        {{ $output/5 }}
+
+                {% ELSE %}
+
+                        {{ $output/6 }}
+
+                {% END_IF %}
+
+                {% IF ($input/5) %}
+
+                        {% IF ($input/6) %}
+
+                                {{ $output/7 }}
+
+                        {% ELSE %}
+
+                                {{ $output/8 }}
+
+                        {% END_IF %}
+
+                {% END_IF %}
+
+        {% END_IF %}
+
+{% END_IF %}
+
+{% IF ($input/7) %}
+
+        {{ $output/9 }}
+
+{% END_IF %}

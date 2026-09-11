@@ -1,0 +1,15 @@
+<html>
+{% INCLUDE(../www/header.html) %}
+<body>
+<h1>Hello, CppFlask!</h1>
+This is the first GET route.<br />
+<br />
+Use this form to see the POST route in action.<br />
+<form method="POST" action="/hello" enctype="multipart/form-data">
+    <input type="text" placeholder="Enter your name" name="name" />
+    <input type="number" placeholder="5" min="2" max="100" step="1" name="count" />
+    <br />
+    <input type="submit" value="Enter">
+</form>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<html>
+{% INCLUDE(../www/header.html) %}
+<body>
+<h1>You POSTed!</h1>
+<h3>Hello, {{ $form/name }}</h3>
+You entered the number <b>{{ $form/count }}</b>.<br />
+{% IF ($form/count <= 10) %}<small>You might want to try a higher number, to see something neat.</small><br/>{% END_IF %}
+Let me count that out for you:<br />
+<table>
+
+{% SET loopEnd = $form/count + 1%}
+{% FOR (i = 1 TO $loopEnd) %}
+    {% SET endOfLine = ($i - 1) % 10 %}
+    {% SET bold = $i % 3 %}
+    {% SET underlined = $i % 5 %}
+
+    {% IF ($endOfLine == 0) %}<tr>{% END_IF %}
+
+    <td>
+        {% IF ($bold == 0) %}<b>{% END_IF %}
+        {% IF ($underlined == 0) %}<u>{% END_IF %}
+            {{ $i }}
+        {% IF ($underlined == 0) %}</u>{% END_IF %}
+        {% IF ($bold == 0) %}</b>{% END_IF %}
+    </td>
+
+    {% IF ($endOfLine == 9) %}</tr>{% END_IF %}
+{% END_FOR %}
+
+</table>
+<br />
+<a href="/">Go back</a>
+</body>
+</html>
