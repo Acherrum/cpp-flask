@@ -87,18 +87,22 @@ TEST_F(JsonObjectTest, EmptyArray) {
 
 TEST_F(JsonObjectTest, AddObject) {
     auto object1 = JsonObject("{}");
-    const auto object2 = JsonObject("{\"id\": 1}");
-    ASSERT_TRUE(object1.isEmpty());
-    object1.add("nested", object2);
+    {
+        const auto object2 = JsonObject("{\"id\": 1}");
+        ASSERT_TRUE(object1.isEmpty());
+        object1.add("nested", object2);
+    }
     ASSERT_FALSE(object1.isEmpty());
     ASSERT_EQ(1L, object1.getValue("nested/id", -1L));
 }
 
 TEST_F(JsonObjectTest, AddObjectIntoArray) {
     auto object1 = JsonObject("{}");
-    const auto object2 = JsonObject("{\"id\": 1}");
-    ASSERT_TRUE(object1.isEmpty());
-    object1.add("nested/0", object2);
+    {
+        const auto object2 = JsonObject("{\"id\": 1}");
+        ASSERT_TRUE(object1.isEmpty());
+        object1.add("nested/0", object2);
+    }
     ASSERT_FALSE(object1.isEmpty());
     ASSERT_EQ(1L, object1.getValue("nested/0/id", -1L));
     ASSERT_EQ(R"raw({"nested":[{"id":1}]})raw", object1.toString());
