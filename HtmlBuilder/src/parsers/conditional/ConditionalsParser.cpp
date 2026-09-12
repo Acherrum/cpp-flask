@@ -36,6 +36,9 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ConditionalsParser::par
         }
     }
     auto [endPos, endCommand] = findEnd(cmd.endPos);
+    if (endPos == std::string::npos) {
+        return { cmd.endPos, std::make_unique<nodes::HtmlNode>("<b>Parse error:</b> Missing END_IF command.<br />Occured here: " + cmd.cmd) };
+    }
     auto [elsePos, elseCommand] = findEnd(cmd.endPos, START_ELSE_TEXT);
     auto endOfParsedData = endPos + endCommand.length();
     if (elsePos < endPos && elseCommand == ELSE_TEXT) {
@@ -59,14 +62,16 @@ std::pair<std::size_t, std::string> ConditionalsParser::findEnd(std::size_t pos,
     auto ifCount = 1;
     auto nextIfPos = _html.find(START_TEXT, pos);
     auto endIfPos = _html.find(endText, pos);
+    if (endIfPos == std::string::npos) {
+        return {std::string::npos, ""};
+    }
     while (ifCount > 0) {
         if (nextIfPos > endIfPos) {
             ifCount--;
             if (ifCount == 0) {
                 return {endIfPos, _html.substr(endIfPos, _html.find("%}", endIfPos) - endIfPos + 2)};
-            } else {
-                endIfPos = _html.find(endText, endIfPos + endText.length());
             }
+            endIfPos = _html.find(endText, endIfPos + endText.length());
         } else {
             ifCount++;
             nextIfPos = _html.find(START_TEXT, nextIfPos + 6);
