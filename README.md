@@ -79,5 +79,6 @@ Thank you for understanding.
 - **0.2.0** TBD
   - Finished nested routes.
   - Added nested route with JSON response to example.
+  - Add `isEmpty()` method to JsonObject.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.

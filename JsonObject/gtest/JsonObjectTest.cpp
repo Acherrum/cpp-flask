@@ -75,4 +75,14 @@ TEST_F(JsonObjectTest, DealWithNestedObjects) {
     ASSERT_EQ(R"raw({"nested":[{"id":1,"index":0},{"id":2,"index":1},{"id":3,"index":2}]})raw", object.toString());
 }
 
+TEST_F(JsonObjectTest, EmptyObject) {
+    const auto object = JsonObject("{}");
+    ASSERT_TRUE(object.isEmpty());
+}
+
+TEST_F(JsonObjectTest, EmptyArray) {
+    const auto object = JsonObject("[]");
+    ASSERT_TRUE(object.isEmpty());
+}
+
 }

@@ -228,4 +228,15 @@ void JsonObject::add(const std::string& key, const std::string& value) {
     addMember(*_pimpl, key, rapidjson::Value(value.c_str(), _pimpl->getRoot()->GetAllocator()));
 }
 
+bool JsonObject::isEmpty() const {
+
+    if (_pimpl->get().IsObject()) {
+        return _pimpl->get().ObjectEmpty();
+    }
+    if (_pimpl->get().IsArray()) {
+        return _pimpl->get().Empty();
+    }
+
+    return false;
+}
 }

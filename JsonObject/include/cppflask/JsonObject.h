@@ -46,6 +46,8 @@ public:
     void add(const std::string& key, const char* value);
     void add(const std::string& key, const std::string& value);
 
+    [[nodiscard]] bool isEmpty() const;
+
 private:
     std::unique_ptr<PImpl> _pimpl{nullptr};
 };
