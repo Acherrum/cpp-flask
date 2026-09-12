@@ -6,7 +6,7 @@ namespace cppflask::html::nodes {
 
 class HtmlNode : public BaseNode {
 public:
-    HtmlNode(const std::string& html);
+    explicit HtmlNode(const std::string& html);
     
     ~HtmlNode() override;
     std::string render(JsonObject& data) override;

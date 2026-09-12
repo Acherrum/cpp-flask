@@ -10,7 +10,7 @@ class ConditionEvaluator {
 public:
     explicit ConditionEvaluator(const std::string& expression);
 
-    bool evaluate(const JsonObject& data) const;
+    [[nodiscard]] bool evaluate(const JsonObject& data) const;
 
 private:
     enum class Comparator {
@@ -30,7 +30,7 @@ private:
     Comparator comparatorFromString(const std::string& comp);
 
     template <typename TYPE>
-    bool eval(TYPE left, Comparator compare, TYPE right) const {
+    static bool eval(TYPE left, Comparator compare, TYPE right) {
         switch (compare) {
             case Comparator::EQ: return left == right;
             case Comparator::NEQ: return left != right;

@@ -11,7 +11,7 @@ public:
     virtual ~Node() = default;
     virtual std::string render(JsonObject& data) = 0;
 
-    virtual const std::string& getType() const = 0;
+    [[nodiscard]] virtual const std::string& getType() const = 0;
 };
 }
 }

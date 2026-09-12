@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <optional>
 
 namespace cppflask {
 class JsonObject;
@@ -11,7 +10,7 @@ class ExpressionEvaluator {
 public:
     explicit ExpressionEvaluator(const std::string& multiExpression);
 
-    bool evaluate(const JsonObject& data) const;
+    [[nodiscard]] bool evaluate(const JsonObject& data) const;
 
 private:
     struct MultiExpression {
@@ -21,7 +20,7 @@ private:
     };
     MultiExpression _expression;
 
-    MultiExpression parseExpression(const std::string& multiExpression) const;
+    [[nodiscard]] MultiExpression parseExpression(const std::string& multiExpression) const;
 };
 }
 

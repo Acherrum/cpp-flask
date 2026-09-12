@@ -6,7 +6,9 @@
 namespace cppflask {
     class Route : public IRoute {
     public:
-        Route(const std::string& name, RouteType type = RouteType::GET, const std::string& contentType = "text/html");
+        explicit Route(const std::string& name,
+            RouteType type = RouteType::GET,
+            const std::string& contentType = "text/html");
         ~Route() override;
 
         RouteType getType() const override;

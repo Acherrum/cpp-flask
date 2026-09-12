@@ -9,7 +9,7 @@ public:
     BaseNode(const std::string& type, const std::string& html);
     ~BaseNode() override;
 
-    const std::string& getType() const override;
+    [[nodiscard]] const std::string& getType() const override;
 
 protected:
     std::string _html;

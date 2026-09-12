@@ -17,7 +17,7 @@ public:
 private:
     const std::string& _html;
 
-    std::pair<std::size_t, std::string> findEnd(std::size_t pos, const std::string& endText = "{% END_IF %}") const;
+    [[nodiscard]] std::pair<std::size_t, std::string> findEnd(std::size_t pos, const std::string& endText = "{% END_IF %}") const;
 };
 }
 

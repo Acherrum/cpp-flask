@@ -6,7 +6,7 @@ namespace cppflask::html::nodes {
 
     class VariableNode : public BaseNode {
     public:
-        VariableNode(const std::string& html);
+        explicit VariableNode(const std::string& html);
 
         ~VariableNode() override;
         std::string render(JsonObject& data) override;

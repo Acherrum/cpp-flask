@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cppflask/Route.h"
 
 class PingPongRoute : public cppflask::Route {

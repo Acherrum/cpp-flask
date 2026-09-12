@@ -1,3 +1,5 @@
+#pragma once
+
 #include "cppflask/Route.h"
 
 #include "cppflask/html/HtmlBuilder.h"
