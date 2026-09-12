@@ -80,5 +80,6 @@ Thank you for understanding.
   - Finished nested routes.
   - Added nested route with JSON response to example.
   - Add `isEmpty()` method to JsonObject.
+  - Add method to add objects to JsonObject.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.

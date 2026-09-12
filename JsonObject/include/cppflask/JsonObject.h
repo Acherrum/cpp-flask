@@ -45,6 +45,7 @@ public:
     void add(const std::string& key, bool value);
     void add(const std::string& key, const char* value);
     void add(const std::string& key, const std::string& value);
+    void add(const std::string& key, const JsonObject& object);
 
     [[nodiscard]] bool isEmpty() const;
 

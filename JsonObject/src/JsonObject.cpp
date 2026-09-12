@@ -49,7 +49,7 @@ namespace {
         return rapidjson::Pointer{key.c_str()};
     }
 
-    void addMember(PImpl& object, const std::string& key, rapidjson::Value value) {
+    void addMember(PImpl& object, const std::string& key, const rapidjson::Value& value) {
         auto pointer = parseKey(key);
         if (!object.get().IsObject()) {
             object.get().SetObject();
@@ -226,6 +226,11 @@ void JsonObject::add(const std::string& key, const char* value) {
 
 void JsonObject::add(const std::string& key, const std::string& value) {
     addMember(*_pimpl, key, rapidjson::Value(value.c_str(), _pimpl->getRoot()->GetAllocator()));
+}
+
+void JsonObject::add(const std::string &key, const JsonObject &object) {
+
+    addMember(*_pimpl, key, object._pimpl->get());
 }
 
 bool JsonObject::isEmpty() const {
