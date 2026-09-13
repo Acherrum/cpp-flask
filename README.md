@@ -85,5 +85,6 @@ Thank you for understanding.
   - Refactor `JsonObject::add()` to `JsonObject::set()`
   - Add tests to confirm overwriting values works using `JsonObject::set()` method.
   - Add `JsonObject::hasMember` method.
+  - Solved an issue with if-else if handling.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.

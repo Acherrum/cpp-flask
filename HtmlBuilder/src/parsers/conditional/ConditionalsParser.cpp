@@ -41,12 +41,13 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ConditionalsParser::par
     }
     auto [elsePos, elseCommand] = findEnd(cmd.endPos, START_ELSE_TEXT);
     auto endOfParsedData = endPos + endCommand.length();
-    if (elsePos < endPos && elseCommand == ELSE_TEXT) {
+    if (elsePos < endPos) {
         nested = HtmlBuilder::uniqueFromText(_html.substr(cmd.endPos, elsePos - cmd.endPos));
-        elseCase = HtmlBuilder::uniqueFromText(_html.substr(elsePos + elseCommand.length(), endPos - (elsePos + elseCommand.length())));
-    } else if (elsePos < endPos && elseCommand.find("IF") != std::string::npos) {
-        nested = HtmlBuilder::uniqueFromText(_html.substr(cmd.endPos, elsePos - cmd.endPos));
-        endOfParsedData = elsePos;
+        if (elseCommand == ELSE_TEXT) {
+            elseCase = HtmlBuilder::uniqueFromText(_html.substr(elsePos + elseCommand.length(), endPos - (elsePos + elseCommand.length())));
+        } else {
+            elseCase = HtmlBuilder::uniqueFromText(_html.substr(elsePos, endOfParsedData - elsePos));
+        }
     } else {
         nested = HtmlBuilder::uniqueFromText(_html.substr(cmd.endPos, endPos - cmd.endPos));
     }

@@ -33,6 +33,58 @@ TEST_F(ConditionalsParserTest, SimpleIfStatement_FALSE) {
     ASSERT_TRUE(result.empty());
 }
 
+TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_AAndB) {
+    auto command = std::string{"{% IF ($a AND $b) %}"};
+    auto html = std::string{"{% IF ($a AND $b) %}a and b{% ELSE IF ($a) %}only a{% ELSE IF ($b) %}only b{% ELSE %}neither{% END_IF %}"};
+    HtmlCommand cmd{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+
+    auto data = JsonObject{R"raw({"a":true, "b": true})raw"};
+    auto result = node->render(data);
+    ASSERT_EQ("a and b", result);
+}
+
+TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_OnlyA) {
+    auto command = std::string{"{% IF ($a AND $b) %}"};
+    auto html = std::string{"{% IF ($a AND $b) %}a and b{% ELSE IF ($a) %}only a{% ELSE IF ($b) %}only b{% ELSE %}neither{% END_IF %}"};
+    HtmlCommand cmd{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+
+    auto data = JsonObject{R"raw({"a":true, "b": false})raw"};
+    auto result = node->render(data);
+    ASSERT_EQ("only a", result);
+}
+
+TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_OnlyB) {
+    auto command = std::string{"{% IF ($a AND $b) %}"};
+    auto html = std::string{"{% IF ($a AND $b) %}a and b{% ELSE IF ($a) %}only a{% ELSE IF ($b) %}only b{% ELSE %}neither{% END_IF %}"};
+    HtmlCommand cmd{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+
+    auto data = JsonObject{R"raw({"a":false, "b": true})raw"};
+    auto result = node->render(data);
+    ASSERT_EQ("only b", result);
+}
+
+TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_Neither) {
+    auto command = std::string{"{% IF ($a AND $b) %}"};
+    auto html = std::string{"{% IF ($a AND $b) %}a and b{% ELSE IF ($a) %}only a{% ELSE IF ($b) %}only b{% ELSE %}neither{% END_IF %}"};
+    HtmlCommand cmd{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+
+    auto data = JsonObject{R"raw({"a":false, "b": false})raw"};
+    auto result = node->render(data);
+    ASSERT_EQ("neither", result);
+}
+
 TEST_F(ConditionalsParserTest, IfElseWithAndLogic_TruePath) {
     auto command = std::string{"{% IF ($text != \"\" AND $first == $second) %}"};
     auto html = std::string{"{% IF ($text != \"\" AND $first == $second) %}true{% ELSE %}false{% END_IF %}"};
