@@ -135,4 +135,12 @@ TEST_F(JsonObjectTest, ClearArrayUsingSetMethod) {
     ASSERT_EQ(R"raw({"nested":[]})raw", object.toString());
 }
 
+TEST_F(JsonObjectTest, HasMemberTest) {
+    auto object = JsonObject(R"raw({"hello":"world","nested":[1,2,3,4],"other":{"id":42}})raw");
+    ASSERT_FALSE(object.hasMember("world"));
+    ASSERT_TRUE(object.hasMember("hello"));
+    ASSERT_FALSE(object.get("nested").hasMember("0"));
+    ASSERT_TRUE(object.get("other").hasMember("id"));
+}
+
 }

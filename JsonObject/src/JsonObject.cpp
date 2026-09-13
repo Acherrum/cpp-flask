@@ -230,6 +230,11 @@ void JsonObject::set(const std::string &key, const JsonObject &object) {
     setMember(*_pimpl, key, object._pimpl->get());
 }
 
+bool JsonObject::hasMember(const std::string &key) const {
+
+    return _pimpl->get().IsObject() && _pimpl->get().HasMember(key.c_str());
+}
+
 bool JsonObject::isEmpty() const {
 
     if (_pimpl->get().IsObject()) {

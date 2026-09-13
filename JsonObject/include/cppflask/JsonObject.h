@@ -47,6 +47,8 @@ public:
     void set(const std::string& key, const std::string& value);
     void set(const std::string& key, const JsonObject& object);
 
+    [[nodiscard]] bool hasMember(const std::string& key) const;
+
     [[nodiscard]] bool isEmpty() const;
 
 private:
