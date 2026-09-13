@@ -57,7 +57,8 @@ void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const
         }
 
         if (!route->getRoutes().empty()) {
-            setUpRoutes(server, *route, prefix + route->getName() + '/');
+            auto additionalPrefix = route->getName().empty() ? "" : route->getName() + '/';
+            setUpRoutes(server, *route, prefix + additionalPrefix);
         }
     }
 }

@@ -86,5 +86,6 @@ Thank you for understanding.
   - Add tests to confirm overwriting values works using `JsonObject::set()` method.
   - Add `JsonObject::hasMember` method.
   - Solved an issue with if-else if handling.
+  - Small fix for adding child routes to the root route.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.
