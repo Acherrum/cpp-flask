@@ -151,7 +151,7 @@ TEST_F(SetNodeTest, OrderOfOperations_ModuloBeforeMultiplication) {
 TEST_F(SetNodeTest, OrderOfOperations_VariableIsSubstituted) {
     auto node = SetNode("x", "$i*2");
     
-    data.add("i",3UL);
+    data.set("i",3UL);
     node.render(data);
 
     // Verify the value was set correctly
@@ -162,8 +162,8 @@ TEST_F(SetNodeTest, OrderOfOperations_VariableIsSubstituted) {
 TEST_F(SetNodeTest, OrderOfOperations_AllVariablesAreSubstituted) {
     auto node = SetNode("x", "$i*$j");
     
-    data.add("i",3UL);
-    data.add("j",3UL);
+    data.set("i",3UL);
+    data.set("j",3UL);
     node.render(data);
 
     // Verify the value was set correctly

@@ -39,13 +39,13 @@ public:
 
     [[nodiscard]] std::string toString() const;
 
-    void add(const std::string& key, long value);
-    void add(const std::string& key, unsigned long value);
-    void add(const std::string& key, double value);
-    void add(const std::string& key, bool value);
-    void add(const std::string& key, const char* value);
-    void add(const std::string& key, const std::string& value);
-    void add(const std::string& key, const JsonObject& object);
+    void set(const std::string& key, long value);
+    void set(const std::string& key, unsigned long value);
+    void set(const std::string& key, double value);
+    void set(const std::string& key, bool value);
+    void set(const std::string& key, const char* value);
+    void set(const std::string& key, const std::string& value);
+    void set(const std::string& key, const JsonObject& object);
 
     [[nodiscard]] bool isEmpty() const;
 

@@ -49,11 +49,8 @@ namespace {
         return rapidjson::Pointer{key.c_str()};
     }
 
-    void addMember(PImpl& object, const std::string& key, const rapidjson::Value& value) {
+    void setMember(PImpl& object, const std::string& key, const rapidjson::Value& value) {
         auto pointer = parseKey(key);
-        if (!object.get().IsObject()) {
-            object.get().SetObject();
-        }
         pointer.Set(object.get(), value, object.getRoot()->GetAllocator());
     }
 
@@ -204,33 +201,33 @@ bool JsonObject::compareKeys(const std::string& key1, const std::string& key2,
     return false;
 }
 
-void JsonObject::add(const std::string& key, long value) {
-    addMember(*_pimpl, key, rapidjson::Value(static_cast<int64_t>(value)));
+void JsonObject::set(const std::string& key, long value) {
+    setMember(*_pimpl, key, rapidjson::Value(static_cast<int64_t>(value)));
 }
 
-void JsonObject::add(const std::string& key, unsigned long value) {
-    addMember(*_pimpl, key, rapidjson::Value(static_cast<uint64_t>(value)));
+void JsonObject::set(const std::string& key, unsigned long value) {
+    setMember(*_pimpl, key, rapidjson::Value(static_cast<uint64_t>(value)));
 }
 
-void JsonObject::add(const std::string& key, double value) {
-    addMember(*_pimpl, key, rapidjson::Value(value));
+void JsonObject::set(const std::string& key, double value) {
+    setMember(*_pimpl, key, rapidjson::Value(value));
 }
 
-void JsonObject::add(const std::string& key, bool value) {
-    addMember(*_pimpl, key, rapidjson::Value(value));
+void JsonObject::set(const std::string& key, bool value) {
+    setMember(*_pimpl, key, rapidjson::Value(value));
 }
 
-void JsonObject::add(const std::string& key, const char* value) {
-    add(key, std::string(value));
+void JsonObject::set(const std::string& key, const char* value) {
+    set(key, std::string(value));
 }
 
-void JsonObject::add(const std::string& key, const std::string& value) {
-    addMember(*_pimpl, key, rapidjson::Value(value.c_str(), _pimpl->getRoot()->GetAllocator()));
+void JsonObject::set(const std::string& key, const std::string& value) {
+    setMember(*_pimpl, key, rapidjson::Value(value.c_str(), _pimpl->getRoot()->GetAllocator()));
 }
 
-void JsonObject::add(const std::string &key, const JsonObject &object) {
+void JsonObject::set(const std::string &key, const JsonObject &object) {
 
-    addMember(*_pimpl, key, object._pimpl->get());
+    setMember(*_pimpl, key, object._pimpl->get());
 }
 
 bool JsonObject::isEmpty() const {

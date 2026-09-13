@@ -212,16 +212,16 @@ std::string SetNode::render(JsonObject& data){
     parsers::CommandVariablesParser{tempExpr}.parse(data);
 
     if (!tempExpr.empty() && (tempExpr.front() == '"' || tempExpr.front() == '\'')) {
-        data.add(_key, parseStringLiteral(tempExpr));
+        data.set(_key, parseStringLiteral(tempExpr));
     } else {
         auto exprWithoutBraces = resolveBraces(tempExpr);
         auto result = parseNumericExpression(exprWithoutBraces);
         if (result.isFloatingPoint) {
-            data.add(_key, std::stod(result.value));
+            data.set(_key, std::stod(result.value));
         } else if (result.isNegative) {
-            data.add(_key, std::stol(result.value));
+            data.set(_key, std::stol(result.value));
         } else {
-            data.add(_key, std::stoul(result.value));
+            data.set(_key, std::stoul(result.value));
         }
     }
     return {};
