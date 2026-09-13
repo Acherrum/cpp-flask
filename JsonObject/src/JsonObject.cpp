@@ -244,6 +244,6 @@ bool JsonObject::isEmpty() const {
         return _pimpl->get().Empty();
     }
 
-    return false;
+    return _pimpl->get().IsNull();
 }
 }

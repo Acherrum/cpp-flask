@@ -87,5 +87,6 @@ Thank you for understanding.
   - Add `JsonObject::hasMember` method.
   - Solved an issue with if-else if handling.
   - Small fix for adding child routes to the root route.
+  - JsonObject should return true for `isEmpty()` when object is null.
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.

@@ -62,7 +62,24 @@ TEST_F(JsonObjectTest, DealWithNestedObjects) {
     ASSERT_EQ(R"raw({"name":"val","new":123})raw", nested.toString());
 }
 
-    TEST_F(JsonObjectTest, DealWithNestedArrays) {
+TEST_F(JsonObjectTest, GetNonExistentNestedObjectShouldReturnEmptyObject) {
+
+    const auto object = JsonObject(R"raw({})raw");
+    auto nested = object.get("nested");
+    ASSERT_TRUE(nested.isEmpty());
+}
+
+TEST_F(JsonObjectTest, UseGetForSomeJsonMagic) {
+
+    const auto object = JsonObject(R"raw({"val":3})raw");
+    auto nested = object.get("val");
+    ASSERT_FALSE(nested.isEmpty());
+    ASSERT_EQ("3", nested.toString());
+    nested.set("id", 1337L);
+    ASSERT_EQ(R"raw({"val":{"id":1337}})raw", object.toString());
+}
+
+TEST_F(JsonObjectTest, DealWithNestedArrays) {
 
     const auto object = JsonObject(R"raw({"nested":[{"id":1},{"id":2},{"id":3}]})raw");
     {
