@@ -20,6 +20,7 @@ namespace cppflask {
 
     protected:
         void setHeader(const std::string& key, const std::string& value);
+        void setCookie(const std::string& key, const std::string& value, unsigned long lifetime);
         void addRoute(std::unique_ptr<IRoute> newRoute);
 
     private:

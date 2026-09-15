@@ -4,6 +4,7 @@
 #include "rapidjson/pointer.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
+#include "rapidjson/error/en.h"
 
 namespace cppflask {
 struct PImpl {
@@ -35,7 +36,14 @@ namespace {
     std::unique_ptr<rapidjson::Document> generateDocument(const std::string& jsonString) {
 
         auto doc = std::make_unique<rapidjson::Document>();
-        doc->Parse(jsonString.c_str());
+        rapidjson::ParseResult parseResult = doc->Parse(jsonString.c_str());
+        if (!parseResult) {
+            auto error = GetParseError_En(parseResult.Code());
+            doc->SetObject();
+            doc->AddMember(rapidjson::Value("error", doc->GetAllocator()), rapidjson::Value(error, doc->GetAllocator()), doc->GetAllocator());
+            doc->AddMember(rapidjson::Value("offset", doc->GetAllocator()), rapidjson::Value(parseResult.Offset()), doc->GetAllocator());
+            doc->AddMember(rapidjson::Value("input", doc->GetAllocator()), rapidjson::Value(jsonString.c_str(), doc->GetAllocator()), doc->GetAllocator());
+        }
         return doc;
     }
 

@@ -160,4 +160,12 @@ TEST_F(JsonObjectTest, HasMemberTest) {
     ASSERT_TRUE(object.get("other").hasMember("id"));
 }
 
+TEST_F(JsonObjectTest, ParseErrorIsCaughtAndCommunicated) {
+    auto object = JsonObject(R"raw({"hello":"world""nested":[1,2,3,4])raw");
+    ASSERT_TRUE(object.hasMember("error"));
+    ASSERT_TRUE(object.hasMember("offset"));
+    ASSERT_TRUE(object.hasMember("input"));
+    ASSERT_EQ("Missing a comma or '}' after an object member.", object.getValueAsString("error"));
+}
+
 }

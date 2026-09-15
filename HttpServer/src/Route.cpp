@@ -5,7 +5,7 @@ namespace cppflask {
         _type{type},
         _name{name},
         _contentType{contentType},
-        _headers{{"Connection", "close"}},
+        _headers{},
         _routes{}
     {
     }
@@ -40,6 +40,11 @@ namespace cppflask {
     void Route::setHeader(const std::string &key, const std::string &value) {
 
         std::ignore = _headers.emplace(key, value);
+    }
+
+    void Route::setCookie(const std::string &key, const std::string &value, unsigned long lifetime) {
+
+        setHeader("Set-Cookie", key +"=" + value + "; Max-Age="+ std::to_string(lifetime) +"; Path=/; SameSite=Strict; HttpOnly");
     }
 
     void Route::addRoute(std::unique_ptr<IRoute> newRoute) {

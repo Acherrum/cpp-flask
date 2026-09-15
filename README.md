@@ -76,7 +76,7 @@ Thank you for understanding.
 
 ## Version history
 
-- **0.2.0** TBD
+- **0.2.0** 2026-09-15
   - Finished nested routes.
   - Added nested route with JSON response to example.
   - Add `isEmpty()` method to JsonObject.
@@ -89,5 +89,8 @@ Thank you for understanding.
   - Small fix for adding child routes to the root route.
   - JsonObject should return true for `isEmpty()` when object is null.
   - Add support for Windows.
+  - Add improved cookie support.
+  - Added JSON parse error handling.
+
 - **0.1.0** 2026-09-11
   - Initial release on Github, with this README and a first example.

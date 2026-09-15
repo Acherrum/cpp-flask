@@ -114,7 +114,7 @@ namespace {
         return operators;
     }
 
-    std::string parseStringLiteral(std::string expr) {
+    std::string parseStringLiteral(const std::string& expr) {
 
         char quote = expr.front();
 
@@ -139,20 +139,18 @@ namespace {
         }
         return result;
     }
-    // Helper to check if a character is any math operator
+
     bool isOperator(char c) {
         return c == '+' || c == '-' || c == '*' || c == '/' || c == '%';
     }
 
-    // Layer 2: Handles Multiplication, Division, and Modulo (Higher Precedence)
     Number parseTerm(const std::string& expr) {
-        // Find the LAST occurrence to maintain left-to-right evaluation order
         size_t operatorPos = expr.find_last_of("*/%");
 
         if (operatorPos != std::string::npos) {
             char op = expr[operatorPos];
             auto left = parseTerm(expr.substr(0, operatorPos));
-            auto right = parseNumericExpression(expr.substr(operatorPos + 1)); // Base values/signs
+            auto right = parseNumericExpression(expr.substr(operatorPos + 1));
 
             const auto& operators = getSupportedOperators();
             auto operIt = std::find_if(operators.begin(), operators.end(), [&](const auto& o) { return o.op == op; });
@@ -160,9 +158,7 @@ namespace {
             return operIt->operation(left, right);
         }
 
-        // No higher precedence operators found, treat as a base number (with potential negative sign)
         if (!expr.empty() && expr[0] == '-') {
-            // Handle unary minus for a single number
             auto positiveValue = parseNumericExpression(expr.substr(1));
             positiveValue.isNegative = true;
             positiveValue.value = "-" + positiveValue.value;
@@ -173,16 +169,13 @@ namespace {
     }
 
     Number parseNumericExpression(const std::string& expr) {
-        // Find the LAST occurrence of + or - to maintain left-to-right evaluation
-        // We scan backwards to ensure left-associativity works correctly
         for (size_t i = expr.length(); i > 0; --i) {
             size_t idx = i - 1;
             char c = expr[idx];
 
             if (c == '+' || c == '-') {
-                // Check if this '-' is actually a negative sign instead of subtraction
                 if (c == '-' && (idx == 0 || isOperator(expr[idx - 1]))) {
-                    continue; // Skip unary minus, let the term/number layer handle it
+                    continue;
                 }
 
                 auto left = parseNumericExpression(expr.substr(0, idx));
@@ -197,8 +190,7 @@ namespace {
 
         return parseTerm(expr);
     }
-
-} // anonymous namespace
+}
 
 namespace cppflask::html::nodes {
 
