@@ -209,6 +209,10 @@ void JsonObject::set(const std::string& key, unsigned long value) {
     setMember(*_pimpl, key, rapidjson::Value(static_cast<uint64_t>(value)));
 }
 
+void JsonObject::set(const std::string& key, unsigned long long value) {
+    setMember(*_pimpl, key, rapidjson::Value(static_cast<uint64_t>(value)));
+}
+
 void JsonObject::set(const std::string& key, double value) {
     setMember(*_pimpl, key, rapidjson::Value(value));
 }

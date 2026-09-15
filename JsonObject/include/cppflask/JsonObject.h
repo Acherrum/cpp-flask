@@ -23,6 +23,7 @@ public:
     [[nodiscard]] std::string getValue(const std::string& key, const std::string& defaultReturnValue) const;
     [[nodiscard]] long getValue(const std::string& key, long defaultReturnValue) const;
     [[nodiscard]] unsigned long getValue(const std::string& key, unsigned long defaultReturnValue) const;
+    [[nodiscard]] unsigned long getValue(const std::string& key, unsigned long long defaultReturnValue) const;
     [[nodiscard]] double getValue(const std::string& key, double defaultReturnValue) const;
     [[nodiscard]] bool getValue(const std::string& key, bool defaultReturnValue) const;
 
@@ -41,6 +42,7 @@ public:
 
     void set(const std::string& key, long value);
     void set(const std::string& key, unsigned long value);
+    void set(const std::string& key, unsigned long long value);
     void set(const std::string& key, double value);
     void set(const std::string& key, bool value);
     void set(const std::string& key, const char* value);
