@@ -6,6 +6,18 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 
+include(GNUInstallDirs)
+
+if(WIN32 AND NOT CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    if(DEFINED ENV{MSYSTEM} AND "$ENV{MSYSTEM}" MATCHES "MINGW64")
+        set(PROJECT_INSTALL_PREFIX "C:/mingw64" CACHE PATH "Default install prefix for MinGW64")
+    else()
+        set(PROJECT_INSTALL_PREFIX "C:/Program Files/${PROJECT_NAME}" CACHE PATH "Default Windows install prefix")
+    endif()
+    
+    set(CMAKE_INSTALL_PREFIX "${PROJECT_INSTALL_PREFIX}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+endif()
+
 add_subdirectory(external)
 
 enable_testing()
