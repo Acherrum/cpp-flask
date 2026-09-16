@@ -9,7 +9,7 @@ target_include_directories(${LIBRARY_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external>
 )
 
 target_link_libraries(${LIBRARY_NAME} PUBLIC JsonObject)
