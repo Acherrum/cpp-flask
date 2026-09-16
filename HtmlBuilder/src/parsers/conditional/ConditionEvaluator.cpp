@@ -7,6 +7,7 @@
 
 #include "cppflask/JsonObject.h"
 
+
 namespace cppflask::html::parsers::conditional {
 ConditionEvaluator::ConditionEvaluator(const std::string& expression) : _expression{parseExpression(expression)} {}
 
@@ -56,8 +57,8 @@ bool ConditionEvaluator::evaluate(const JsonObject& data) const {
 
 ConditionEvaluator::Expression ConditionEvaluator::parseExpression(const std::string& expression) {
 
-    static const std::vector<std::string> comparators{"==",">=","<=",">","<","!="};
-    for (const auto& comp : comparators) {
+    for (const auto& compPair : getComparatorMap()) {
+        auto comp = compPair.first;
         auto pos = expression.find(comp);
         if (pos != std::string::npos) {
             auto left = expression.substr(0,pos);
@@ -75,6 +76,15 @@ ConditionEvaluator::Expression ConditionEvaluator::parseExpression(const std::st
 }
 
 ConditionEvaluator::Comparator ConditionEvaluator::comparatorFromString(const std::string& comp) {
+
+    auto result = getComparatorMap().find(comp);
+    if (result == getComparatorMap().end()) {
+        return Comparator::NONE;
+    }
+    return result->second;
+}
+
+const std::unordered_map<std::string, ConditionEvaluator::Comparator>& ConditionEvaluator::getComparatorMap() {
     static const std::unordered_map<std::string, ConditionEvaluator::Comparator> compareMap{
         {"==", Comparator::EQ},
         {"!=", Comparator::NEQ},
@@ -83,11 +93,6 @@ ConditionEvaluator::Comparator ConditionEvaluator::comparatorFromString(const st
         {">", Comparator::GT},
         {"<", Comparator::LT}
     };
-    auto result = compareMap.find(comp);
-    if (result == compareMap.end()) {
-        return Comparator::NONE;
-    }
-    return result->second;
+    return compareMap;
 }
-
 }

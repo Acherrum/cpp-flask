@@ -7,7 +7,7 @@ namespace cppflask::html::parsers::loop {
 LoopSettings ExpressionEvaluator::evaluate(const std::string& expression)
 {
     auto settings = LoopSettings{};
-    auto toPos = expression.find(" TO ");
+    auto toPos = find(expression, " TO ");
     if (toPos != std::string::npos) {
         auto assignmentPos = expression.find('=');
         settings.variable = expression.substr(0, assignmentPos);
@@ -19,7 +19,7 @@ LoopSettings ExpressionEvaluator::evaluate(const std::string& expression)
         settings.end = expression.substr(toPos + 4);
         stripAll(settings.end);
     } else {
-        auto inPos = expression.find(" IN ");
+        auto inPos = find(expression, " IN ");
         if (inPos == std::string::npos) {
             return {};
         }

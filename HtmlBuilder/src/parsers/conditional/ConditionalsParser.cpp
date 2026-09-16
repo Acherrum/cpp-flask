@@ -6,6 +6,7 @@
 #include "cppflask/html/nodes/HtmlNode.h"
 #include "cppflask/html/nodes/ConditionalNode.h"
 #include "cppflask/html/HtmlCommand.h"
+#include "cppflask/html/StringHelper.h"
 
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/HtmlBuilder.h"
@@ -25,10 +26,9 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ConditionalsParser::par
     std::unique_ptr<HtmlBuilder> nested{nullptr};
     auto elseCase = std::unique_ptr<HtmlBuilder>();
 
-    auto isEndCommand = cmd.cmd.find(END_TEXT) != std::string::npos;
     std::size_t beginStatement = 0;
     std::size_t endStatement = 0;
-    if (!isEndCommand) {
+    if (!contains(cmd.cmd, END_TEXT)) {
         beginStatement = cmd.cmd.find("(");
         endStatement = cmd.cmd.rfind(")");
         if (beginStatement == std::string::npos || endStatement == std::string::npos) {
@@ -43,7 +43,7 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ConditionalsParser::par
     auto endOfParsedData = endPos + endCommand.length();
     if (elsePos < endPos) {
         nested = HtmlBuilder::uniqueFromText(_html.substr(cmd.endPos, elsePos - cmd.endPos));
-        if (elseCommand == ELSE_TEXT) {
+        if (equal(elseCommand, ELSE_TEXT)) {
             elseCase = HtmlBuilder::uniqueFromText(_html.substr(elsePos + elseCommand.length(), endPos - (elsePos + elseCommand.length())));
         } else {
             elseCase = HtmlBuilder::uniqueFromText(_html.substr(elsePos, endOfParsedData - elsePos));
@@ -61,8 +61,8 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ConditionalsParser::par
 
 std::pair<std::size_t, std::string> ConditionalsParser::findEnd(std::size_t pos, const std::string& endText) const {
     auto ifCount = 1;
-    auto nextIfPos = _html.find(START_TEXT, pos);
-    auto endIfPos = _html.find(endText, pos);
+    auto nextIfPos = find(_html, START_TEXT, pos);
+    auto endIfPos = find(_html, endText, pos);
     if (endIfPos == std::string::npos) {
         return {std::string::npos, ""};
     }
@@ -72,10 +72,10 @@ std::pair<std::size_t, std::string> ConditionalsParser::findEnd(std::size_t pos,
             if (ifCount == 0) {
                 return {endIfPos, _html.substr(endIfPos, _html.find("%}", endIfPos) - endIfPos + 2)};
             }
-            endIfPos = _html.find(endText, endIfPos + endText.length());
+            endIfPos = find(_html, endText, endIfPos + endText.length());
         } else {
             ifCount++;
-            nextIfPos = _html.find(START_TEXT, nextIfPos + 6);
+            nextIfPos = find(_html, START_TEXT, nextIfPos + 6);
         }
         if (endIfPos == std::string::npos) {
             break;

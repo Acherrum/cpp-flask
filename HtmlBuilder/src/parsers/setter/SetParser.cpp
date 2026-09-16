@@ -13,7 +13,7 @@ namespace cppflask::html::parsers::setter {
         // Extract the content between {% SET and %}
         std::string content = cmd.cmd;
         stripAll(content);
-        content = content.substr(content.find("SET") + 3, content.length()-7);
+        content = content.substr(find(content, "SET") + 3, content.length()-7);
 
         // Parse "variable = expression"
         size_t eqPos = content.find('=');

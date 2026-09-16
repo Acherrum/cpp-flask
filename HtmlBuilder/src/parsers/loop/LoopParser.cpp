@@ -7,6 +7,7 @@
 
 #include "cppflask/html/nodes/HtmlNode.h"
 #include "cppflask/html/nodes/LoopNode.h"
+#include "cppflask/html/StringHelper.h"
 
 namespace {
 constexpr std::string START_TEXT{"{% FOR "};
@@ -31,18 +32,18 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> LoopParser::parse(const
 
 std::pair<std::size_t, std::string> LoopParser::findEnd(std::size_t pos) {
     auto forCount = 1;
-    auto nextLoopPos = _html.find(START_TEXT, pos);
-    auto endForPos = _html.find(END_TEXT, pos);
+    auto nextLoopPos = find(_html, START_TEXT, pos);
+    auto endForPos = find(_html, END_TEXT, pos);
     while (forCount > 0) {
         if (nextLoopPos > endForPos) {
             forCount--;
             if (forCount == 0) {
                 return {endForPos, _html.substr(endForPos, _html.find("%}", endForPos) - endForPos + 2)};
             }
-            endForPos = _html.find(END_TEXT, endForPos + END_TEXT.length());
+            endForPos = find(_html, END_TEXT, endForPos + END_TEXT.length());
         } else {
             forCount++;
-            nextLoopPos = _html.find(START_TEXT, nextLoopPos + 6);
+            nextLoopPos = find(_html, START_TEXT, nextLoopPos + 6);
         }
         if (endForPos == std::string::npos) {
             break;

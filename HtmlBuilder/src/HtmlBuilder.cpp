@@ -11,6 +11,7 @@
 #include "cppflask/html/parsers/simple/IncludeParser.h"
 #include "cppflask/html/parsers/simple/VariablesParser.h"
 #include "cppflask/html/HtmlCommand.h"
+#include "cppflask/html/StringHelper.h"
 
 #include "cppflask/JsonObject.h"
 
@@ -23,6 +24,7 @@ using cppflask::html::parsers::IncludeParser;
 using cppflask::html::parsers::VariablesParser;
 using cppflask::html::nodes::Node;
 using cppflask::html::nodes::HtmlNode;
+using cppflask::html::contains;
 
 namespace {
     std::string loadFromFile(const std::string &path) {
@@ -73,22 +75,27 @@ namespace {
                 nodes.emplace_back(std::move(node));
                 html.erase(startCommandPos, endOfParsedData - startCommandPos);
             } else {
-                auto endCommandPos = html.find("%}", startCommandPos) + 2;
+                auto endCommandPos = html.find("%}", startCommandPos);
+                if (endCommandPos == std::string::npos) {
+                    nodes.emplace_back(std::make_unique<HtmlNode>("<b>Parse error:</b> missing closing characters ('%}') for command."));
+                    return nodes;
+                }
+                endCommandPos += 2;
                 auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
                 auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                if (command.find("IF") != std::string::npos) {
+                if (contains(command, "IF")) {
                     auto [endOfParsedData, node] = ConditionalsParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (command.find("FOR") != std::string::npos) {
+                } else if (contains(command, "FOR")) {
                     auto [endOfParsedData, node] = LoopParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (command.find("SET") != std::string::npos) {
+                } else if (contains(command, "SET")) {
                     auto [endOfParsedData, node] = SetParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (command.find("INCLUDE") != std::string::npos) {
+                } else if (contains(command, "INCLUDE")) {
                     auto [endOfParsedData, node] = IncludeParser{html}.parse(cmd);
                     if (node != nullptr) {
                         nodes.emplace_back(std::move(node));

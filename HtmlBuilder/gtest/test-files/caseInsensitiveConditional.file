@@ -1,0 +1,9 @@
+{% if ($var and $VAR) %}
+both
+{% elsE if ($var) %}
+lower-case
+{% eLse iF ($VAR) %}
+upper-case
+{% elSe %}
+neither
+{% end_If %}

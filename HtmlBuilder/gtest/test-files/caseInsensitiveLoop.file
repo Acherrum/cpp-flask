@@ -1,0 +1,4 @@
+{% fOr (i = 1 to 6) %}
+{% set oddOrEven = $i % 2 %}
+{{ $i }} is {% if ($oddOrEven == 0) %}even{% else %}odd{% end_if %}
+{% end_For %}

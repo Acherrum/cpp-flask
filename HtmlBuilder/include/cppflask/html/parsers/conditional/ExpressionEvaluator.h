@@ -6,6 +6,10 @@ namespace cppflask {
 class JsonObject;
 
 namespace html::parsers::conditional {
+enum class LogicOperator {
+    None, And, Or
+};
+
 class ExpressionEvaluator {
 public:
     explicit ExpressionEvaluator(const std::string& multiExpression);
@@ -15,7 +19,7 @@ public:
 private:
     struct MultiExpression {
         std::string left;
-        std::string logic;
+        LogicOperator logic;
         std::string right;
     };
     MultiExpression _expression;

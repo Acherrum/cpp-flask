@@ -100,4 +100,22 @@ TEST_F(HtmlBuilderTest, OneBuilder_DifferentDataCalls) {
         ASSERT_EQ(result, "-3 -2 -1 0 <br />1 ");
     }
 }
+
+TEST_F(HtmlBuilderTest, CaseInsensitiveTest) {
+
+    auto builder = HtmlBuilder::fromFile("caseInsensitiveTest.file");
+    auto data = JsonObject();
+    auto result = builder.buildWithData(data);
+    stripAll(result, '\n');
+    ASSERT_EQ(result, "neither1 is odd2 is even3 is odd4 is even5 is odd");
+}
+
+TEST_F(HtmlBuilderTest, CaseInsensitiveTest_BothTruePath) {
+
+    auto builder = HtmlBuilder::fromFile("caseInsensitiveTest.file");
+    auto data = JsonObject(R"raw({"var":true,"VAR":true})raw");
+    auto result = builder.buildWithData(data);
+    stripAll(result, '\n');
+    ASSERT_EQ(result, "both1 is odd2 is even3 is odd4 is even5 is odd");
+}
 }

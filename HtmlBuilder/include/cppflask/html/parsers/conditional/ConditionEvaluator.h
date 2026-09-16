@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
 
 namespace cppflask {
 class JsonObject;
@@ -25,9 +26,9 @@ private:
 
     Expression _expression;
 
-    Expression parseExpression(const std::string& expression);
-
-    Comparator comparatorFromString(const std::string& comp);
+    static Expression parseExpression(const std::string& expression);
+    static Comparator comparatorFromString(const std::string& comp);
+    static const std::unordered_map<std::string, Comparator>& getComparatorMap();
 
     template <typename TYPE>
     static bool eval(TYPE left, Comparator compare, TYPE right) {

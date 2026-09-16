@@ -76,6 +76,9 @@ Thank you for understanding.
 
 ## Version history
 
+- **0.3.0** TBD
+  - Made commands case-insensitive.
+
 - **0.2.0** 2026-09-15
   - Finished nested routes.
   - Added nested route with JSON response to example.
