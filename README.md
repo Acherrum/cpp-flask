@@ -39,7 +39,7 @@ cmake --build . --target install
 
 ### Building it as part of your project
 
-If you do not want, or can, install this project on your system.
+If you do not want, or can't, install this project on your system.
 As of v0.3.0, CppFlask fully supports CMake's `FetchContent` functionality.
 
 ```cmake
@@ -96,7 +96,7 @@ Thank you for understanding.
 
 ## Version history
 
-- **0.3.0** TBD
+- **0.3.0** 2026-09-16
   - Made commands case-insensitive.
   - Added support for CMake's `FetchContent` instead of relying on installation.
   - Cleaned up the example, to also use `FetchContent`.
