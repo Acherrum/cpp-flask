@@ -1,5 +1,5 @@
 <html>
-{% INCLUDE(../www/header.html) %}
+{% include(www/header.html) %}
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <script>
     function pong(cell_id, value) {
@@ -14,28 +14,28 @@
 <h1>You POSTed!</h1>
 <h3>Hello, {{ $form/name }}</h3>
 You entered the number <b>{{ $form/count }}</b>.<br />
-{% IF ($form/count <= 10) %}<small>You might want to try a higher number, to see something neat.</small><br/>{% END_IF %}
+{% if ($form/count <= 10) %}<small>You might want to try a higher number, to see something neat.</small><br/>{% end_if %}
 Let me count that out for you:<br />
 <br />
 
 <table style="width:100%;">
-{% SET loopEnd = $form/count + 1%}
-{% FOR (i = 1 TO $loopEnd) %}
-    {% SET endOfLine = ($i - 1) % 10 %}
-    {% SET bold = $i % 3 %}
-    {% SET underlined = $i % 5 %}
+{% set loopEnd = $form/count + 1 %}
+{% for (i = 1 to $loopEnd) %}
+    {% set endOfLine = ($i - 1) % 10 %}
+    {% set bold = $i % 3 %}
+    {% set underlined = $i % 5 %}
 
-    {% IF ($endOfLine == 0) %}<tr>{% END_IF %}
+    {% if ($endOfLine == 0) %}<tr>{% end_if %}
 
     <td style="width:10%;" id="cell-{{ $i }}" onclick="javascript:pong('cell-{{ $i }}', {{ $i }})">
-        {% IF ($bold == 0) %}<b>{% END_IF %}
-        {% IF ($underlined == 0) %}<u>{% END_IF %}
+        {% if ($bold == 0) %}<b>{% end_if %}
+        {% if ($underlined == 0) %}<u>{% end_if %}
             {{ $i }}
-        {% IF ($underlined == 0) %}</u>{% END_IF %}
-        {% IF ($bold == 0) %}</b>{% END_IF %}
+        {% if ($underlined == 0) %}</u>{% end_if %}
+        {% if ($bold == 0) %}</b>{% end_if %}
     </td>
 
-    {% IF ($endOfLine == 9) %}</tr>{% END_IF %}
+    {% if ($endOfLine == 9) %}</tr>{% end_if %}
 {% END_FOR %}
 
 </table>

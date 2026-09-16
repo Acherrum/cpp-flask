@@ -14,4 +14,4 @@ target_include_directories(${LIBRARY_NAME}
         $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(${LIBRARY_NAME} PRIVATE CppFlask::CppFlask)
+target_link_libraries(${LIBRARY_NAME} PRIVATE CppFlask)

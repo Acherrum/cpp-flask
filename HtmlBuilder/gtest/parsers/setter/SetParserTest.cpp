@@ -11,11 +11,10 @@ public:
     JsonObject data{R"raw({})raw"};
 };
 
-
 TEST_F(SetParserTest, SimpleAssignment) {
     // Test simple numeric assignment
     std::string html = R"raw({% SET x = 5 %})raw";
-    auto cmd = HtmlCommand{html, 0, static_cast<std::size_t>(html.length())};
+    auto cmd = HtmlCommand{html, 0, html.length()};
     auto parser = SetParser{html};
 
     auto [endOfData, node] = parser.parse(cmd);
@@ -29,7 +28,6 @@ TEST_F(SetParserTest, SimpleAssignment) {
     auto value = data.getValue("x", 0UL);
     ASSERT_EQ(value, 5UL);
 }
-
 
 TEST_F(SetParserTest, MultipleSetAssignmentAndUsages) {
     // Test simple numeric assignment

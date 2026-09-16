@@ -31,11 +31,31 @@ a single target will be available for end-users upon installation: CppFlask.
 Simply running CMake build steps, should install the project and make it available for 
 usage in your CMake project.
 
-```aiignore
+```bash
 mkdir -p build && cd build
 cmake ..
 cmake --build . --target install
 ```
+
+### Building it as part of your project
+
+If you do not want, or can, install this project on your system.
+As of v0.3.0, CppFlask fully supports CMake's `FetchContent` functionality.
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+        CppFlask
+        GIT_REPOSITORY https://github.com/acherrum/cpp-flask.git
+        GIT_TAG        v0.3.0
+        GIT_SHALLOW    TRUE
+)
+
+FetchContent_MakeAvailable(CppFlask)
+```
+
+And then simply link against `CppFlask`.
 
 ## Examples
 
@@ -78,6 +98,8 @@ Thank you for understanding.
 
 - **0.3.0** TBD
   - Made commands case-insensitive.
+  - Added support for CMake's `FetchContent` instead of relying on installation.
+  - Cleaned up the example, to also use `FetchContent`.
 
 - **0.2.0** 2026-09-15
   - Finished nested routes.

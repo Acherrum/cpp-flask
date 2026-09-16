@@ -27,6 +27,11 @@ using cppflask::html::nodes::HtmlNode;
 using cppflask::html::contains;
 
 namespace {
+    const std::string IF_STR{" IF "};
+    const std::string FOR_STR{" FOR "};
+    const std::string SET_STR{" SET "};
+    const std::string INCLUDE_STR{" INCLUDE("};
+
     std::string loadFromFile(const std::string &path) {
 
         auto file = std::ifstream{path};
@@ -83,19 +88,19 @@ namespace {
                 endCommandPos += 2;
                 auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
                 auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                if (contains(command, "IF")) {
+                if (contains(command, IF_STR)) {
                     auto [endOfParsedData, node] = ConditionalsParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, "FOR")) {
+                } else if (contains(command, FOR_STR)) {
                     auto [endOfParsedData, node] = LoopParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, "SET")) {
+                } else if (contains(command, SET_STR)) {
                     auto [endOfParsedData, node] = SetParser{html}.parse(cmd);
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, "INCLUDE")) {
+                } else if (contains(command, INCLUDE_STR)) {
                     auto [endOfParsedData, node] = IncludeParser{html}.parse(cmd);
                     if (node != nullptr) {
                         nodes.emplace_back(std::move(node));

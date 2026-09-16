@@ -6,13 +6,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 
+include(FetchContent)
 
-find_package(CppFlask REQUIRED)
+FetchContent_Declare(
+        CppFlask
+        GIT_REPOSITORY https://github.com/acherrum/cpp-flask.git
+        GIT_TAG        origin/master
+        GIT_SHALLOW    TRUE
+)
+
+FetchContent_MakeAvailable(CppFlask)
 
 add_subdirectory(routes)
 
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE CppFlask::CppFlask Routes)
+target_link_libraries(${PROJECT_NAME} PRIVATE CppFlask Routes)
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
