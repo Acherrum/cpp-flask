@@ -96,6 +96,9 @@ Thank you for understanding.
 
 ## Version history
 
+- **0.4.0** TBD
+  - Fixed an issue setting multiple cookies.
+
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.
   - Added support for CMake's `FetchContent` instead of relying on installation.

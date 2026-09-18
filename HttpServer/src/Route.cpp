@@ -27,7 +27,7 @@ namespace cppflask {
         return _contentType;
     }
 
-    const std::unordered_map<std::string, std::string> &Route::getHeaders() const {
+    const std::unordered_multimap<std::string, std::string> &Route::getHeaders() const {
 
         return _headers;
     }

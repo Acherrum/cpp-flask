@@ -15,7 +15,7 @@ namespace cppflask {
         const std::string& getName() const override;
         const std::string& getContentType() const override;
 
-        const std::unordered_map<std::string, std::string>& getHeaders() const override;
+        const std::unordered_multimap<std::string, std::string>& getHeaders() const override;
         const std::vector<std::unique_ptr<IRoute>>& getRoutes() const override;
 
     protected:
@@ -28,7 +28,7 @@ namespace cppflask {
         std::string _name;
         std::string _contentType;
 
-        std::unordered_map<std::string, std::string> _headers;
+        std::unordered_multimap<std::string, std::string> _headers;
         std::vector<std::unique_ptr<IRoute>> _routes;
     };
 }

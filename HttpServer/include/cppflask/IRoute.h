@@ -19,7 +19,7 @@ namespace cppflask {
         [[nodiscard]] virtual RouteType getType() const = 0;
         [[nodiscard]] virtual const std::string& getName() const = 0;
         [[nodiscard]] virtual const std::string& getContentType() const = 0;
-        [[nodiscard]] virtual const std::unordered_map<std::string, std::string>& getHeaders() const = 0;
+        [[nodiscard]] virtual const std::unordered_multimap<std::string, std::string>& getHeaders() const = 0;
 
         virtual std::string generatePage(JsonObject& requestData) = 0;
     };
