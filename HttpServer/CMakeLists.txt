@@ -1,7 +1,7 @@
 
 set(LIBRARY_NAME HttpServer)
 
-add_library(${LIBRARY_NAME} STATIC src/HttpServer.cpp src/Route.cpp
+add_library(${LIBRARY_NAME} STATIC src/HttpServer.cpp src/Route.cpp src/SimpleRoute.cpp
 )
 
 target_include_directories(${LIBRARY_NAME} 
