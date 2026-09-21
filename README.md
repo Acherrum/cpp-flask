@@ -99,6 +99,7 @@ Thank you for understanding.
 - **0.4.0** TBD
   - Fixed an issue setting multiple cookies.
   - Added SimpleRoute class to remove unnecessary class creation for simple routes.
+  - Cleaned up parser handling (more SOLID), breaking INCLUDE commands: use `include (` instead of `include(`.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.
