@@ -7,14 +7,11 @@
 
 
 namespace cppflask::html::parsers {
-VariablesParser::VariablesParser(std::string& html) : _html{html}
-{
-}
 
-std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> VariablesParser::parse(const HtmlCommand& cmd)
+std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> VariablesParser::parse(std::string& html, const HtmlCommand& cmd)
 {
 
-    auto fullVariable = _html.substr(cmd.startPos + 2, cmd.endPos-cmd.startPos-4);
+    auto fullVariable = html.substr(cmd.startPos + 2, cmd.endPos-cmd.startPos-4);
     stripAll(fullVariable);
     if (fullVariable.at(0) != '$') {
         return {cmd.endPos, std::make_unique<nodes::HtmlNode>(cmd.cmd)};

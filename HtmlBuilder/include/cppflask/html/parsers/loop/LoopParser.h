@@ -13,13 +13,8 @@ struct LoopSettings;
 
 class LoopParser {
 public:
-    explicit LoopParser(const std::string& html);
-    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(const HtmlCommand& cmd);
-
-private:
-    const std::string& _html;
-
-    std::pair<std::size_t, std::string> findEnd(std::size_t pos);
+    inline static const std::string TYPE{"FOR"};
+    static std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(std::string& html, const HtmlCommand& cmd);
 };
 }
 

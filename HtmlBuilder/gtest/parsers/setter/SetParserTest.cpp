@@ -15,9 +15,8 @@ TEST_F(SetParserTest, SimpleAssignment) {
     // Test simple numeric assignment
     std::string html = R"raw({% SET x = 5 %})raw";
     auto cmd = HtmlCommand{html, 0, html.length()};
-    auto parser = SetParser{html};
 
-    auto [endOfData, node] = parser.parse(cmd);
+    auto [endOfData, node] = SetParser::parse(html, cmd);
     ASSERT_NE(endOfData, std::size_t{0});
 
     auto result = node->render(data);
@@ -34,11 +33,10 @@ TEST_F(SetParserTest, MultipleSetAssignmentAndUsages) {
     std::string html = R"raw({% SET x = 5 %}{% SET y = $x - 1 %})raw";
     auto cmd1 = HtmlCommand{"{% SET x = 5 %}", 0, 15};
     auto cmd2 = HtmlCommand{"{% SET y = $x - 1 %}", 15, 20};
-    auto parser = SetParser{html};
 
-    auto [endOfData1, node1] = parser.parse(cmd1);
+    auto [endOfData1, node1] = SetParser::parse(html, cmd1);
     ASSERT_NE(endOfData1, std::size_t{0});
-    auto [endOfData2, node2] = parser.parse(cmd2);
+    auto [endOfData2, node2] = SetParser::parse(html, cmd2);
     ASSERT_NE(endOfData1, std::size_t{0});
 
     node1->render(data);

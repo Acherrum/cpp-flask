@@ -12,7 +12,7 @@ TEST_F(VariablesParserTest, SimpleVariable) {
     std::string command = "{{$name}}";
     std::string html = command + " Hello World";
     auto cmd = HtmlCommand{html, 0, command.length()};
-    auto [endOfData, node] = VariablesParser{html}.parse(cmd);
+    auto [endOfData, node] = VariablesParser::parse(html, cmd);
 
     {
         JsonObject data{R"raw({"name":"John"})raw"};
@@ -30,7 +30,7 @@ TEST_F(VariablesParserTest, VariableNotInData) {
     std::string command = "{{$unknown}}";
     std::string html = "Hello " + command;
     auto cmd = HtmlCommand{html, html.find(command), command.length()};
-    auto [endOfData, node] = VariablesParser{html}.parse(cmd);
+    auto [endOfData, node] = VariablesParser::parse(html, cmd);
 
     {
         JsonObject data{R"raw({"user":"Alice"})raw"};

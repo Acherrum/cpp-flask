@@ -16,7 +16,7 @@ TEST_F(LoopParserTest, ClassicForLoop) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto result = node->render(emptyJson);
     ASSERT_EQ("0 1 2 3 4 5 6 7 8 9 ", result);
 }
@@ -27,7 +27,7 @@ TEST_F(LoopParserTest, ClassicForLoop_Nested) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto result = node->render(emptyJson);
     ASSERT_EQ("0 0 0 1 1 0 1 1 ", result);
 }
@@ -38,7 +38,7 @@ TEST_F(LoopParserTest, ClassicForLoop_ImpossibleLoop) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto result = node->render(emptyJson);
     ASSERT_EQ("", result);
 }
@@ -49,7 +49,7 @@ TEST_F(LoopParserTest, ClassicForLoop_NegativeLoop) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto result = node->render(emptyJson);
     ASSERT_EQ("-5 -4 -3 ", result);
 }
@@ -60,7 +60,7 @@ TEST_F(LoopParserTest, ClassicForLoop_UsingStartVariable) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     JsonObject data{R"raw({"start":3,"end":9})raw"};
     auto result = node->render(data);
     ASSERT_EQ("3 4 5 ", result);
@@ -72,7 +72,7 @@ TEST_F(LoopParserTest, ClassicForLoop_UsingEndVariable) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     JsonObject data{R"raw({"start":3,"end":9})raw"};
     auto result = node->render(data);
     ASSERT_EQ("0 1 2 3 4 5 6 7 8 ", result);
@@ -84,7 +84,7 @@ TEST_F(LoopParserTest, ClassicForLoop_UsingBothVariables) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     JsonObject data{R"raw({"start":3,"end":9})raw"};
     auto result = node->render(data);
     ASSERT_EQ("3 4 5 6 7 8 ", result);
@@ -96,7 +96,7 @@ TEST_F(LoopParserTest, ForEachLoop) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto data = JsonObject{R"raw({"array": [{"name":"Peter","job":"spider-man"},{"name":"Bruce","job":"batman"}]})raw"};
     auto result = node->render(data);
     ASSERT_EQ("Peter is spider-man.<br />Bruce is batman.<br />", result);
@@ -108,7 +108,7 @@ TEST_F(LoopParserTest, ForEachLoop_EmptyList) {
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
-    auto [endOfData, node] = LoopParser{html}.parse(cmd);
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
     auto data = JsonObject{R"raw({"array": []})raw"};
     auto result = node->render(data);
     ASSERT_EQ("", result);

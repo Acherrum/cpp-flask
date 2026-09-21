@@ -9,28 +9,14 @@
 #include "cppflask/html/nodes/LoopNode.h"
 #include "cppflask/html/StringHelper.h"
 
+using cppflask::html::find;
+
 namespace {
 constexpr std::string START_TEXT{"{% FOR "};
 constexpr std::string END_TEXT{"{% END_FOR %}"};
-}
 
-namespace cppflask::html::parsers::loop {
-LoopParser::LoopParser(const std::string& html) : _html{html} {}
 
-std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> LoopParser::parse(const HtmlCommand& cmd) {
-    auto beginStatement = cmd.cmd.find('(') + 1;
-    auto endStatement = cmd.cmd.rfind(')');
-    auto [endPos, endCommand] = findEnd(cmd.endPos);
-    if (beginStatement == std::string::npos || endStatement == std::string::npos) {
-        return {endPos + endCommand.length(), std::make_unique<nodes::HtmlNode>("<b>Parse error:</b> Missing brackets.<br />Error occured while parsing: " + cmd.cmd + "<br /><br />")};
-    }
-    auto expression = cmd.cmd.substr(beginStatement, endStatement - beginStatement);
-    auto settings = ExpressionEvaluator::evaluate(expression);
-    auto loopContent = _html.substr(cmd.endPos, endPos - cmd.endPos);
-    return {endPos + endCommand.length(), std::make_unique<nodes::LoopNode>(settings, loopContent)};
-}
-
-std::pair<std::size_t, std::string> LoopParser::findEnd(std::size_t pos) {
+std::pair<std::size_t, std::string> findEnd(std::string& _html, std::size_t pos) {
     auto forCount = 1;
     auto nextLoopPos = find(_html, START_TEXT, pos);
     auto endForPos = find(_html, END_TEXT, pos);
@@ -51,6 +37,20 @@ std::pair<std::size_t, std::string> LoopParser::findEnd(std::size_t pos) {
     }
     return {std::string::npos, ""};
 }
+}
 
+namespace cppflask::html::parsers::loop {
 
+std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> LoopParser::parse(std::string& _html, const HtmlCommand& cmd) {
+    auto beginStatement = cmd.cmd.find('(') + 1;
+    auto endStatement = cmd.cmd.rfind(')');
+    auto [endPos, endCommand] = findEnd(_html, cmd.endPos);
+    if (beginStatement == std::string::npos || endStatement == std::string::npos) {
+        return {endPos + endCommand.length(), std::make_unique<nodes::HtmlNode>("<b>Parse error:</b> Missing brackets.<br />Error occured while parsing: " + cmd.cmd + "<br /><br />")};
+    }
+    auto expression = cmd.cmd.substr(beginStatement, endStatement - beginStatement);
+    auto settings = ExpressionEvaluator::evaluate(expression);
+    auto loopContent = _html.substr(cmd.endPos, endPos - cmd.endPos);
+    return {endPos + endCommand.length(), std::make_unique<nodes::LoopNode>(settings, loopContent)};
+}
 }

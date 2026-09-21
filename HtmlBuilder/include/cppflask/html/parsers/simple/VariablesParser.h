@@ -11,11 +11,7 @@ struct HtmlCommand;
 namespace parsers {
 class VariablesParser {
 public:
-    explicit VariablesParser(std::string& html);
-    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(const HtmlCommand& cmd);
-
-private:
-    std::string& _html;
+    static std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(std::string& html, const HtmlCommand& cmd);
 };
 }
 }

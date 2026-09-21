@@ -7,9 +7,8 @@
 
 
 namespace cppflask::html::parsers::setter {
-    SetParser::SetParser(const std::string& html) : _html{html} {}
 
-    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> SetParser::parse(const HtmlCommand& cmd) {
+    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> SetParser::parse(std::string&, const HtmlCommand& cmd) {
         // Extract the content between {% SET and %}
         std::string content = cmd.cmd;
         stripAll(content);

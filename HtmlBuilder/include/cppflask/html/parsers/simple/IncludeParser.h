@@ -11,11 +11,10 @@ struct HtmlCommand;
 namespace parsers {
     class IncludeParser {
     public:
-        explicit IncludeParser(std::string& html);
-        std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(const HtmlCommand& cmd);
-
+        inline static const std::string TYPE{"INCLUDE"};
+        static std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(std::string& html, const HtmlCommand& cmd);
     private:
-        std::string& _html;
+        std::string _type{"INCLUDE"};
     };
 }
 }

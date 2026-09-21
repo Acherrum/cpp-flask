@@ -22,10 +22,7 @@ namespace {
 }
 
 namespace cppflask::html::parsers {
-
-    IncludeParser::IncludeParser(std::string& html) : _html{html} {}
-
-    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> IncludeParser::parse(const HtmlCommand& cmd) {
+    std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> IncludeParser::parse(std::string& _html, const HtmlCommand& cmd) {
 
         auto includeContentPos = cmd.cmd.find('(');
         auto includeContentEndPos = cmd.cmd.rfind(')');
@@ -45,5 +42,4 @@ namespace cppflask::html::parsers {
         _html.replace(cmd.startPos, cmd.endPos - cmd.startPos, html);
         return {cmd.startPos, nullptr};
     }
-
 }

@@ -5,33 +5,18 @@
 #include "cppflask/html/nodes/Node.h"
 #include "cppflask/html/nodes/HtmlNode.h"
 
-#include "cppflask/html/parsers/conditional/ConditionalsParser.h"
-#include "cppflask/html/parsers/loop/LoopParser.h"
-#include "cppflask/html/parsers/setter/SetParser.h"
-#include "cppflask/html/parsers/simple/IncludeParser.h"
-#include "cppflask/html/parsers/simple/VariablesParser.h"
 #include "cppflask/html/HtmlCommand.h"
-#include "cppflask/html/StringHelper.h"
 
 #include "cppflask/JsonObject.h"
+#include "cppflask/html/parsers/ParserRegistry.h"
+#include "cppflask/html/parsers/simple/VariablesParser.h"
 
 using cppflask::JsonObject;
 using cppflask::html::HtmlCommand;
-using cppflask::html::parsers::conditional::ConditionalsParser;
-using cppflask::html::parsers::loop::LoopParser;
-using cppflask::html::parsers::setter::SetParser;
-using cppflask::html::parsers::IncludeParser;
-using cppflask::html::parsers::VariablesParser;
 using cppflask::html::nodes::Node;
 using cppflask::html::nodes::HtmlNode;
-using cppflask::html::contains;
 
 namespace {
-    const std::string IF_STR{" IF "};
-    const std::string FOR_STR{" FOR "};
-    const std::string SET_STR{" SET "};
-    const std::string INCLUDE_STR{" INCLUDE("};
-
     std::string loadFromFile(const std::string &path) {
 
         auto file = std::ifstream{path};
@@ -50,6 +35,8 @@ namespace {
     }
 
     std::vector<std::unique_ptr<Node>> parseHtml(std::string html) {
+
+        auto parsers = cppflask::html::parsers::ParserRegistry::get();
 
         std::vector<std::unique_ptr<Node>> nodes{};
         auto startCommandPos = html.find('{');
@@ -76,7 +63,7 @@ namespace {
                 auto endCommandPos = html.find("}}", startCommandPos) + 2;
                 auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
                 auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                auto [endOfParsedData, node] = VariablesParser{html}.parse(cmd);
+                auto [endOfParsedData, node] = cppflask::html::parsers::VariablesParser::parse(html, cmd);
                 nodes.emplace_back(std::move(node));
                 html.erase(startCommandPos, endOfParsedData - startCommandPos);
             } else {
@@ -88,24 +75,10 @@ namespace {
                 endCommandPos += 2;
                 auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
                 auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                if (contains(command, IF_STR)) {
-                    auto [endOfParsedData, node] = ConditionalsParser{html}.parse(cmd);
+                auto [endOfParsedData, node] = parsers.parse(html, cmd);
+                if (node != nullptr) {
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, FOR_STR)) {
-                    auto [endOfParsedData, node] = LoopParser{html}.parse(cmd);
-                    nodes.emplace_back(std::move(node));
-                    html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, SET_STR)) {
-                    auto [endOfParsedData, node] = SetParser{html}.parse(cmd);
-                    nodes.emplace_back(std::move(node));
-                    html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                } else if (contains(command, INCLUDE_STR)) {
-                    auto [endOfParsedData, node] = IncludeParser{html}.parse(cmd);
-                    if (node != nullptr) {
-                        nodes.emplace_back(std::move(node));
-                        html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                    }
                 }
             }
             startCommandPos = html.find('{');
@@ -122,7 +95,8 @@ namespace {
 namespace cppflask::html {
 HtmlBuilder::HtmlBuilder(std::string name, std::vector<std::unique_ptr<Node>> nodes) :
     _name{std::move(name)},
-    _nodes{std::move(nodes) } {}
+    _nodes{std::move(nodes) } {
+}
 
 HtmlBuilder::~HtmlBuilder() = default;
 

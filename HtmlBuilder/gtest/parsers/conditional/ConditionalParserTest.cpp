@@ -12,12 +12,11 @@ public:
     HtmlCommand _cmd{
         _command, 0, _command.length()
     };
-    ConditionalsParser _parser{_html};
 };
 
 TEST_F(ConditionalsParserTest, SimpleIfStatement_TRUE) {
 
-    auto [endOfData, node] = _parser.parse(_cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(_html, _cmd);
     ASSERT_EQ(endOfData, _html.length());
     auto data = JsonObject{"{\"hello\":true}"};
     auto result = node->render(data);
@@ -26,7 +25,7 @@ TEST_F(ConditionalsParserTest, SimpleIfStatement_TRUE) {
 
 TEST_F(ConditionalsParserTest, SimpleIfStatement_FALSE) {
 
-    auto [endOfData, node] = _parser.parse(_cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(_html, _cmd);
     ASSERT_EQ(endOfData, _html.length());
     auto data = JsonObject{"{\"hello\":false}"};
     auto result = node->render(data);
@@ -39,7 +38,7 @@ TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_AAndB) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"a":true, "b": true})raw"};
     auto result = node->render(data);
@@ -52,7 +51,7 @@ TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_OnlyA) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"a":true, "b": false})raw"};
     auto result = node->render(data);
@@ -65,7 +64,7 @@ TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_OnlyB) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"a":false, "b": true})raw"};
     auto result = node->render(data);
@@ -78,7 +77,7 @@ TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_Neither) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"a":false, "b": false})raw"};
     auto result = node->render(data);
@@ -91,7 +90,7 @@ TEST_F(ConditionalsParserTest, IfElseWithAndLogic_TruePath) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"text":"not empty", "first": "banana", "second":"banana"})raw"};
     auto result = node->render(data);
@@ -104,12 +103,13 @@ TEST_F(ConditionalsParserTest, IfElseWithAndLogic_FalsePath_ShortCircuit) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"text":"", "first": "banana", "second":"banana"})raw"};
     auto result = node->render(data);
     ASSERT_EQ("false", result);
 }
+
 
 TEST_F(ConditionalsParserTest, IfElseWithAndLogic_FalsePath) {
     auto command = std::string{"{% IF ($text != \"\" AND $first == $second) %}"};
@@ -117,7 +117,7 @@ TEST_F(ConditionalsParserTest, IfElseWithAndLogic_FalsePath) {
     HtmlCommand cmd{
         command, 0, command.length()
     };
-    auto [endOfData, node] = ConditionalsParser{html}.parse(cmd);
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
 
     auto data = JsonObject{R"raw({"text":"not empty", "first": "banana", "second":"bananas"})raw"};
     auto result = node->render(data);
