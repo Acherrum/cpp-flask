@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include "cppflask/html/FilterRegistry.h"
 #include "cppflask/html/parsers/loop/LoopParser.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/JsonObject.h"
@@ -112,5 +113,41 @@ TEST_F(LoopParserTest, ForEachLoop_EmptyList) {
     auto data = JsonObject{R"raw({"array": []})raw"};
     auto result = node->render(data);
     ASSERT_EQ("", result);
+}
+
+TEST_F(LoopParserTest, ForEachLoop_WithFilter) {
+    FilterRegistry::registerFilter("print", [](JsonObject& object) {
+        return object.getValueAsString("name") + " is " + object.getValueAsString("job");
+    });
+
+    auto command = std::string{"{% FOR (el IN $array) %}"};
+    auto html = std::string{R"raw({% FOR (el IN $array) %}{{ $el | print }}.<br />{% END_FOR %})raw"};
+    auto cmd = HtmlCommand{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
+    auto data = JsonObject{R"raw({"array": [{"name":"Peter","job":"spider-man"},{"name":"Bruce","job":"batman"}]})raw"};
+    auto result = node->render(data);
+    ASSERT_EQ("Peter is spider-man.<br />Bruce is batman.<br />", result);
+}
+
+TEST_F(LoopParserTest, ClassicForLoop_WithFilter) {
+    FilterRegistry::registerFilter("pingPong", [](JsonObject& value) {
+        auto result = std::string{};
+        auto val = std::stoll(value.getValueAsString(""));
+        if (val % 3 == 0) result += "Ping";
+        if (val % 5 == 0) result += "Pong";
+        if (result.empty()) result = std::to_string(val);
+        return result;
+    });
+
+    auto command = std::string{"{% FOR (i = 1 TO 10) %}"};
+    auto html = std::string{R"raw({% FOR (i = 0 TO 10) %}{{ $i | pingPong }} {% END_FOR %})raw"};
+    auto cmd = HtmlCommand{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = LoopParser::parse(html, cmd);
+    auto result = node->render(emptyJson);
+    ASSERT_EQ("1 2 Ping 4 Pong Ping 7 8 Ping ", result);
 }
 }
