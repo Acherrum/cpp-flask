@@ -2,7 +2,7 @@
 {% include (www/header.html) %}
 <body>
 <h1>You POSTed!</h1>
-<h3>Hello, {{ $form/name }}</h3>
+<h3>Hello, {{ $form/name | serialize }}</h3>
 You entered the number <b>{{ $form/count }}</b>.<br />
 {% if ($form/count <= 10) %}<small>You might want to try a higher number, to see something neat.</small><br/>{% end_if %}
 Let me count that out for you:<br />
@@ -11,6 +11,7 @@ Let me count that out for you:<br />
 <table style="width:100%;">
 {% set loopEnd = $form/count + 1 %}
 {% for (i = 1 to $loopEnd) %}
+    {% set endOfLine = ($i - 1) % 10 %}
 
     {% if ($endOfLine == 0) %}<tr>{% end_if %}
 
