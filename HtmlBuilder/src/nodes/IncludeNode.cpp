@@ -11,7 +11,7 @@ namespace cppflask::html::nodes {
 
     IncludeNode::~IncludeNode() = default;
 
-    std::string IncludeNode::render(JsonObject& data) {
+    std::string IncludeNode::render(JsonObject& data) const {
 
         return HtmlBuilder::fromText(data.getValueAsString(_variable))
             .buildWithData(data);

@@ -9,7 +9,7 @@ public:
     explicit HtmlNode(const std::string& html);
     
     ~HtmlNode() override;
-    std::string render(JsonObject& data) override;
+    std::string render(JsonObject& data) const override;
 };
 
 }

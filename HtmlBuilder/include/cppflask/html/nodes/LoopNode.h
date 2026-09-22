@@ -18,14 +18,14 @@ public:
 
     ~LoopNode() override;
 
-    std::string render(JsonObject& data) override;
+    std::string render(JsonObject& data) const override;
 
 private:
     parsers::loop::LoopSettings _settings;
     std::string _contents;
 
-    long long getLoopStart(JsonObject& data);
-    long long getLoopEnd(JsonObject& data);
+    long long getLoopStart(JsonObject& data) const;
+    long long getLoopEnd(JsonObject& data) const;
 };
 
 }

@@ -50,7 +50,7 @@ LoopNode::LoopNode(parsers::loop::LoopSettings settings, std::string contents) :
 
 LoopNode::~LoopNode() = default;
 
-std::string LoopNode::render(JsonObject& data)
+std::string LoopNode::render(JsonObject& data) const
 {
     auto result = std::string{};
 
@@ -79,7 +79,7 @@ std::string LoopNode::render(JsonObject& data)
     return result;
 }
 
-long long LoopNode::getLoopStart(JsonObject& data) {
+long long LoopNode::getLoopStart(JsonObject& data) const {
     if (_settings.start.empty()) {
         return 0LL;
     }
@@ -91,7 +91,7 @@ long long LoopNode::getLoopStart(JsonObject& data) {
     }
 }
 
-long long LoopNode::getLoopEnd(JsonObject &data) {
+long long LoopNode::getLoopEnd(JsonObject &data) const {
     if (!_settings.dataVar.empty()) {
         return static_cast<long long>(data.getArraySize(_settings.dataVar));
     }
