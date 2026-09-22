@@ -15,6 +15,7 @@ using cppflask::JsonObject;
 using cppflask::html::HtmlCommand;
 using cppflask::html::nodes::Node;
 using cppflask::html::nodes::HtmlNode;
+using cppflask::html::parsers::ParserRegistry;
 
 namespace {
     std::string loadFromFile(const std::string &path) {
@@ -35,8 +36,6 @@ namespace {
     }
 
     std::vector<std::unique_ptr<Node>> parseHtml(std::string html) {
-
-        auto parsers = cppflask::html::parsers::ParserRegistry::get();
 
         std::vector<std::unique_ptr<Node>> nodes{};
         auto startCommandPos = html.find('{');
@@ -75,7 +74,7 @@ namespace {
                 endCommandPos += 2;
                 auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
                 auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                auto [endOfParsedData, node] = parsers.parse(html, cmd);
+                auto [endOfParsedData, node] = ParserRegistry::parse(html, cmd);
                 if (node != nullptr) {
                     nodes.emplace_back(std::move(node));
                     html.erase(startCommandPos, endOfParsedData - startCommandPos);

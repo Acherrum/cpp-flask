@@ -1,15 +1,5 @@
 <html>
 {% include (www/header.html) %}
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-<script>
-    function pong(cell_id, value) {
-        var cell = $('#'+cell_id);
-        var text = cell.text();
-        $.get('/hello/ping?cur='+text+'&val=' + value, function(data) {
-            cell.html(data.response);
-        });
-    }
-</script>
 <body>
 <h1>You POSTed!</h1>
 <h3>Hello, {{ $form/name }}</h3>
@@ -21,25 +11,17 @@ Let me count that out for you:<br />
 <table style="width:100%;">
 {% set loopEnd = $form/count + 1 %}
 {% for (i = 1 to $loopEnd) %}
-    {% set endOfLine = ($i - 1) % 10 %}
-    {% set bold = $i % 3 %}
-    {% set underlined = $i % 5 %}
 
     {% if ($endOfLine == 0) %}<tr>{% end_if %}
 
-    <td style="width:10%;" id="cell-{{ $i }}" onclick="javascript:pong('cell-{{ $i }}', {{ $i }})">
-        {% if ($bold == 0) %}<b>{% end_if %}
-        {% if ($underlined == 0) %}<u>{% end_if %}
-            {{ $i }}
-        {% if ($underlined == 0) %}</u>{% end_if %}
-        {% if ($bold == 0) %}</b>{% end_if %}
+    <td style="width:10%;" id="cell-{{ $i }}">
+        {{ $i | pingPong }}
     </td>
 
     {% if ($endOfLine == 9) %}</tr>{% end_if %}
 {% END_FOR %}
 
 </table>
-<small>You can click the bold/underlined numbers too ;)</small><br />
 <br />
 <a href="/">Go back</a>
 </body>

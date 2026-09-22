@@ -9,14 +9,14 @@
 #include "cppflask/html/nodes/HtmlNode.h"
 
 namespace cppflask::html::parsers {
-    ParserRegistry ParserRegistry::get() {
+    ParserRegistry& ParserRegistry::get() {
         static ParserRegistry _instance{};
         return _instance;
     }
 
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ParserRegistry::parse(std::string &html, const HtmlCommand &command) {
 
-        for (const auto& [type, parser] : _registry) {
+        for (const auto& [type, parser] : get()._registry) {
             if (contains(command.cmd, std::string{" " + type + " "})) {
                 return parser(html, command);
             }

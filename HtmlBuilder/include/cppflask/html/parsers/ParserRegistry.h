@@ -14,14 +14,19 @@ struct HtmlCommand;
 namespace parsers {
     class ParserRegistry {
     public:
-        static ParserRegistry get();
 
-        std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(std::string& html, const HtmlCommand& command);
+        static std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> parse(std::string& html, const HtmlCommand& command);
+
+        ParserRegistry(const ParserRegistry&) = delete;
+        ParserRegistry& operator=(const ParserRegistry&) = delete;
+        ParserRegistry(ParserRegistry&&) = delete;
+        ParserRegistry& operator=(ParserRegistry&&) = delete;
 
     private:
         using ParseFunction = std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>>(*)(std::string& html, const HtmlCommand& command);
         std::unordered_map<std::string, ParseFunction> _registry{};
 
+        static ParserRegistry& get();
         ParserRegistry();
 
         template <typename PARSER>

@@ -2,6 +2,7 @@
 
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/nodes/VariableNode.h"
+#include "cppflask/html/nodes/PipedVariableNode.h"
 #include "cppflask/html/nodes/HtmlNode.h"
 #include "cppflask/html/HtmlCommand.h"
 
@@ -15,6 +16,11 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> VariablesParser::parse(
     stripAll(fullVariable);
     if (fullVariable.at(0) != '$') {
         return {cmd.endPos, std::make_unique<nodes::HtmlNode>(cmd.cmd)};
+    }
+    auto pipePos = fullVariable.find('|');
+    if (pipePos != std::string::npos) {
+        return {cmd.endPos, std::make_unique<nodes::PipedVariableNode>(
+            fullVariable.substr(1,pipePos-1), fullVariable.substr(pipePos+1))};
     }
     return {cmd.endPos, std::make_unique<nodes::VariableNode>(fullVariable.substr(1))};
 }
