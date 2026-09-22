@@ -6,7 +6,7 @@ namespace cppflask::html::nodes {
 HtmlNode::HtmlNode(const std::string& html) : BaseNode{"Html", html} {}
 HtmlNode::~HtmlNode() = default;
 
-std::string HtmlNode::render(JsonObject&)
+std::string HtmlNode::render(JsonObject&) const
 {
     return _html;
 }

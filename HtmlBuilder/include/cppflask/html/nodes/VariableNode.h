@@ -9,7 +9,7 @@ namespace cppflask::html::nodes {
         explicit VariableNode(const std::string& html);
 
         ~VariableNode() override;
-        std::string render(JsonObject& data) override;
+        std::string render(JsonObject& data) const override;
     };
 
 }

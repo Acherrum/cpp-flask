@@ -20,7 +20,7 @@ public:
 
     ~ConditionalNode() override;
 
-    std::string render(JsonObject& data) override;
+    std::string render(JsonObject& data) const override;
 
 private:
     parsers::conditional::ExpressionEvaluator _expression;

@@ -9,7 +9,7 @@ VariableNode::VariableNode(const std::string& html) : BaseNode{"Variable", html}
 }
 VariableNode::~VariableNode() = default;
 
-std::string VariableNode::render(JsonObject& data)
+std::string VariableNode::render(JsonObject& data) const
 {
     return data.getValueAsString(_html);
 }

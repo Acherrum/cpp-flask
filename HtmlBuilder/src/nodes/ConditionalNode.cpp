@@ -16,7 +16,7 @@ ConditionalNode::ConditionalNode(parsers::conditional::ExpressionEvaluator expre
 
 ConditionalNode::~ConditionalNode() = default;
 
-std::string ConditionalNode::render(JsonObject& data)
+std::string ConditionalNode::render(JsonObject& data) const
 {
     if (_expression.evaluate(data)) {
         return _trueBranch->buildWithData(data);

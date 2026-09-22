@@ -14,7 +14,7 @@ namespace cppflask {
 
             ~SetNode() override;
 
-            std::string render(JsonObject& data) override;
+            std::string render(JsonObject& data) const override;
 
         private:
             std::string _key;

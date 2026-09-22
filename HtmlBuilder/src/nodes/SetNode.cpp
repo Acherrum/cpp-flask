@@ -198,7 +198,7 @@ SetNode::SetNode(std::string key, std::string expression) : BaseNode("Set",""), 
 
 SetNode::~SetNode() = default;
 
-std::string SetNode::render(JsonObject& data){
+std::string SetNode::render(JsonObject& data) const {
 
     auto tempExpr = _expression;
     parsers::CommandVariablesParser{tempExpr}.parse(data);

@@ -11,7 +11,7 @@ PipedVariableNode::PipedVariableNode(const std::string& var, const std::string& 
 
 PipedVariableNode::~PipedVariableNode() = default;
 
-std::string PipedVariableNode::render(JsonObject &data) {
+std::string PipedVariableNode::render(JsonObject &data) const {
 
     auto var = data.get(_html);
     return _pipeMethod(var);
