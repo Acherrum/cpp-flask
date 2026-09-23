@@ -16,7 +16,7 @@ namespace cppflask {
         return val == RouteType::GET ? "GET" : "POST";
     }
     
-    class IRoute : public IRouter {
+    class IRoute : public virtual IRouter {
     public:
         ~IRoute() override = default;
 

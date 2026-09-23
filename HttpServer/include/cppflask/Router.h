@@ -3,7 +3,7 @@
 #include "cppflask/IRouter.h"
 
 namespace cppflask {
-    class Router : public IRouter {
+    class Router : public virtual IRouter {
     public:
         Router();
         ~Router() override;
