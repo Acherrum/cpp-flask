@@ -173,6 +173,25 @@ namespace cppflask {
         return _stopSignal.get_future();
     }
 
+    void HttpServer::run(IRouter &router) {
+
+        static HttpServer server{router};
+
+        auto catchSignal = [](int sig) {
+            std::cout << "[signal] Caught interrupt: " << std::to_string(sig) << std::endl;
+            server.stop();
+        };
+
+        std::signal(SIGINT, catchSignal);
+        std::signal(SIGTERM, catchSignal);
+
+        std::cout << "Starting the server." << std::endl;
+        server.start();
+
+        auto promise = server.getStopSignal();
+        promise.wait();
+    }
+
     void HttpServer::listen() {
 
         _isStarted = true;

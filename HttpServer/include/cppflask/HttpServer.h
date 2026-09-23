@@ -20,6 +20,13 @@ namespace cppflask {
         [[nodiscard]] bool isRunning() const;
         [[nodiscard]] std::future<void> getStopSignal();
 
+        /**
+         * Convenience function to simply run a server.
+         * This method will create a default server, start it and wait for the stop to be called.
+         * @param router
+         */
+        static void run(IRouter& router);
+
     private:
         std::unique_ptr<httplib::Server> _server;
         std::thread _serverThread{};
