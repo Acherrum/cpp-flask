@@ -1,6 +1,7 @@
 #include "cppflask/HttpServer.h"
 
 #include <iostream>
+#include <csignal>
 
 #include "httplib/httplib.h"
 
