@@ -12,6 +12,10 @@ namespace cppflask {
         GET, POST
     };
 
+    inline std::string toString(RouteType val) {
+        return val == RouteType::GET ? "GET" : "POST";
+    }
+    
     class IRoute : public IRouter {
     public:
         ~IRoute() override = default;
