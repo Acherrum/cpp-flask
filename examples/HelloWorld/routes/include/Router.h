@@ -1,17 +1,12 @@
 #pragma once
 
-#include "cppflask/IRouter.h"
+#include "cppflask/Router.h"
 
 /**
  * The Router class is the entry point to the webapps RestAPI.
  */
-class Router : public cppflask::IRouter {
+class Router : public cppflask::Router {
 public:
     Router();
     ~Router() override;
-
-    const std::vector<std::unique_ptr<cppflask::IRoute>>& getRoutes() const;
-
-private:
-    std::vector<std::unique_ptr<cppflask::IRoute>> _routes;
 };
