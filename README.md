@@ -101,6 +101,9 @@ Thank you for understanding.
   - Added SimpleRoute class to remove unnecessary class creation for simple routes.
   - Cleaned up parser handling (more SOLID), breaking INCLUDE commands: use `include (` instead of `include(`.
   - Add support for user-injectable 'filters', allowing variables to be piped through a user injected method.
+  - Add callback functionality to Router so that developers can create a `shutdown` route in their API - if desired.
+  - Add static `run` method to the HttpServer class, to remove boilerplate `main` code and catch interrupt signals.
+  - Add `Router` class to the main package, to remove some of that boilerplate as well.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.
