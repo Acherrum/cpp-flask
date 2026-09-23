@@ -135,7 +135,7 @@ namespace cppflask {
     HttpServer::HttpServer(IRouter& router) :
         _server{std::make_unique<httplib::Server>()} {
 
-        router.setStopCommand([&]{ _server->stop(); });
+        router.setStopCommand([&]{ stop(); });
         setUpRoutes(*_server, router);
     }
 
