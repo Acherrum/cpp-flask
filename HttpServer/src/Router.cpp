@@ -1,5 +1,7 @@
 #include "cppflask/Router.h"
 
+#include <thread>
+
 #include "cppflask/IRoute.h"
 
 namespace cppflask {
@@ -24,6 +26,9 @@ namespace cppflask {
 
     void Router::stopServer() const {
 
-        _stopCommand();
+        std::thread([&] {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            _stopCommand();
+        }).detach();
     }
 }
