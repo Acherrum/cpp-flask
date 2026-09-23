@@ -132,9 +132,10 @@ void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const
 }
 
 namespace cppflask {
-    HttpServer::HttpServer(const IRouter& router) :
+    HttpServer::HttpServer(IRouter& router) :
         _server{std::make_unique<httplib::Server>()} {
 
+        router.setStopCommand([&]{ _server->stop(); });
         setUpRoutes(*_server, router);
     }
 
@@ -158,12 +159,18 @@ namespace cppflask {
         _server->stop();
         _serverThread.join();
         _isStarted = false;
+        _stopSignal.set_value();
         std::cout << "Stopped" << std::endl;
     }
 
     bool HttpServer::isRunning() const {
 
         return _isStarted;
+    }
+
+    std::future<void> HttpServer::getStopSignal() {
+
+        return _stopSignal.get_future();
     }
 
     void HttpServer::listen() {
