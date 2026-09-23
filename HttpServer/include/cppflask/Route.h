@@ -1,10 +1,11 @@
 #pragma once
 
 #include "cppflask/IRoute.h"
+#include "cppflask/Router.h"
 
 
 namespace cppflask {
-    class Route : public IRoute {
+    class Route : public Router, public IRoute {
     public:
         explicit Route(const std::string& name,
             RouteType type = RouteType::GET,
@@ -16,12 +17,10 @@ namespace cppflask {
         const std::string& getContentType() const override;
 
         const std::unordered_multimap<std::string, std::string>& getHeaders() const override;
-        const std::vector<std::unique_ptr<IRoute>>& getRoutes() const override;
 
     protected:
         void setHeader(const std::string& key, const std::string& value);
         void setCookie(const std::string& key, const std::string& value, unsigned long lifetime);
-        void addRoute(std::unique_ptr<IRoute> newRoute);
 
     private:
         RouteType _type;
@@ -29,6 +28,5 @@ namespace cppflask {
         std::string _contentType;
 
         std::unordered_multimap<std::string, std::string> _headers;
-        std::vector<std::unique_ptr<IRoute>> _routes;
     };
 }
