@@ -13,20 +13,20 @@ namespace {
     const HtmlBuilder helloBuilder{HtmlBuilder::fromFile("www/hello.html")};
 }
 
-Router::Router() {
+Router::Router() : cppflask::Router{} {
 
-    _routes.emplace_back(std::make_unique<SimpleRoute>("",
+    addRoute(std::make_unique<SimpleRoute>("",
         [&](JsonObject&) {
             return homeBuilder.build();
         }));
 
-    _routes.emplace_back(std::make_unique<SimpleRoute>("hello",
+    addRoute(std::make_unique<SimpleRoute>("hello",
         [&](JsonObject& request) {
             return helloBuilder.buildWithData(request);
         },
         cppflask::RouteType::POST));
 
-    _routes.emplace_back(std::make_unique<SimpleRoute>("hello/ping",
+    addRoute(std::make_unique<SimpleRoute>("hello/ping",
         [&](JsonObject& request) {
             auto result = std::string{};
             auto curVal = request.getValue("get/cur", std::string{});
@@ -57,7 +57,3 @@ Router::Router() {
 
 Router::~Router() = default;
 
-const std::vector<std::unique_ptr<cppflask::IRoute>> &Router::getRoutes() const {
-
-    return _routes;
-}
