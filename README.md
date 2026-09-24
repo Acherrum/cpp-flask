@@ -20,6 +20,7 @@ The internal libraries are
    - Variables (fetched from JsonObject)
    - Setting custom variables (when you want to calculate something in the frontend)
    - Including other files (keep things DRY)
+   - Extending other files (making dropping content in a standard layout much easier).
 3. JsonObject
    - A user-friendly wrapper-object around RapidJSON
 
@@ -104,6 +105,7 @@ Thank you for understanding.
   - Add callback functionality to Router so that developers can create a `shutdown` route in their API - if desired.
   - Add static `run` method to the HttpServer class, to remove boilerplate `main` code and catch interrupt signals.
   - Add `Router` class to the main package, to remove some of that boilerplate as well.
+  - Add `extends` command to the HtmlBuilder suite.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

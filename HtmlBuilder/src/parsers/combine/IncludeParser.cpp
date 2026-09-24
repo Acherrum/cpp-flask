@@ -1,4 +1,4 @@
-#include "cppflask/html/parsers/simple/IncludeParser.h"
+#include "../../../include/cppflask/html/parsers/combine/IncludeParser.h"
 
 #include <fstream>
 #include <sstream>

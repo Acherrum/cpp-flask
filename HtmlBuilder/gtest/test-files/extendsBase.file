@@ -1,0 +1,5 @@
+{% extends (baseForExtendsTest.file) %}
+
+{% block insideBase %}
+-->{% block nestedInBase %}{% end_block %}<--
+{% end_block %}
