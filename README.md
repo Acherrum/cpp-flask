@@ -13,7 +13,8 @@ The project contains 3 internal libraries and exports 1 bundle upon installation
 The internal libraries are
 1. HttpServer 
    - Simple entry point to set up and handle the API.
-   - Currently handles POST and GET routes.
+   - Offers a static `run` method to just make the server run with your router.
+   - Offers `Router`, `Route` and `SimpleRoute` classes, to limit boilerplate code.
 2. HtmlBuilder
    - Conditionals (if, else if, else)
    - Loops (classic for-loop and for .. in .. )
@@ -106,6 +107,8 @@ Thank you for understanding.
   - Add static `run` method to the HttpServer class, to remove boilerplate `main` code and catch interrupt signals.
   - Add `Router` class to the main package, to remove some of that boilerplate as well.
   - Add `extends` command to the HtmlBuilder suite.
+  - Extend supported API routes (added PUT and DELETE).
+  - Added support for `path_params`. These are now available in the request json as `params`.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

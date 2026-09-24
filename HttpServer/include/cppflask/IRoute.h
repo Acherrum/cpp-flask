@@ -6,16 +6,9 @@
 #include <unordered_map>
 
 #include "cppflask/JsonObject.h"
+#include "cppflask/RouteType.h"
 
 namespace cppflask {
-    enum class RouteType {
-        GET, POST
-    };
-
-    inline std::string toString(RouteType val) {
-        return val == RouteType::GET ? "GET" : "POST";
-    }
-    
     class IRoute : public virtual IRouter {
     public:
         ~IRoute() override = default;

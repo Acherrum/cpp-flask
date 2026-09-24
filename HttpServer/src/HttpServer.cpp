@@ -10,24 +10,6 @@
 
 namespace {
 
-std::string escape(const std::string& input) {
-    auto result = std::string{};
-    std::for_each(input.begin(), input.end(), [&](const auto& c) {
-        if (c == '\\' || c == '"') {
-            result += '\\';
-        }
-        result += c;
-    });
-    
-    return result;
-}
-
-void removeTrailingComma(std::string& jsonString) {
-    if (jsonString.back() == ',') {
-        jsonString.back() = ' ';
-    }
-}
-
 void parseCookies(const std::string& cookies, std::unordered_map<std::string, std::string>& jar) {
 
     std::stringstream stream(cookies);
@@ -35,7 +17,7 @@ void parseCookies(const std::string& cookies, std::unordered_map<std::string, st
 
     while (std::getline(stream, keyValue, ';')) {
         size_t start = keyValue.find_first_not_of(' ');
-        if (start == std::string::npos) continue; 
+        if (start == std::string::npos) continue;
         keyValue = keyValue.substr(start);
 
         // 3. Split the single pair by '='
@@ -46,59 +28,57 @@ void parseCookies(const std::string& cookies, std::unordered_map<std::string, st
     }
 }
 
-std::string createHeaders(const httplib::Headers& headers) {
+template<typename MAP_LIKE>
+cppflask::JsonObject createObjectFromKeyValueList(const MAP_LIKE& keyValueList) {
+    auto result = cppflask::JsonObject{};
+    for (const auto& [key, value] : keyValueList) {
+        result.set(key, value);
+    }
+    return result;
+}
+
+std::pair<cppflask::JsonObject, cppflask::JsonObject> createHeaders(const httplib::Headers& headers) {
     auto jar = std::unordered_map<std::string, std::string>{};
-    auto result = std::string{"\"headers\": {"};
+    auto headerJson = cppflask::JsonObject{};
     for (const auto& entry : headers) {
         if (entry.first == "Cookie") {
             parseCookies(entry.second, jar);
+        } else {
+            headerJson.set(entry.first, entry.second);
         }
-        result += "\"" + entry.first + "\": \"" + escape(entry.second) + "\",";
     }
-    removeTrailingComma(result);
-    result += "}, \"cookies\": {";
-    for (const auto& cookie : jar) {
-        result += "\"" + cookie.first + "\": \"" + escape(cookie.second) + "\",";
-    }
-    removeTrailingComma(result);
-    return result + "}";
+    return { headerJson, createObjectFromKeyValueList(jar) };
 }
 
-std::string createGet(const httplib::Params& params) {
-    auto result = std::string{"\"get\": {"};
-    for (const auto& entry : params) {
-        result += "\"" + entry.first + "\": \"" + escape(entry.second) + "\",";
-    }
-    removeTrailingComma(result);
-    return result + "}";
-}
 
-std::string createForm(const httplib::MultipartFormData& form) {
+cppflask::JsonObject createForm(const httplib::MultipartFormData& form) {
 
-    auto result = std::string{"\"form\": {"};
+    auto result = cppflask::JsonObject{};
     for (const auto& field : form.fields) {
-        result += "\"" + field.second.name + "\": \"" + escape(field.second.content) + "\",";
+        result.set(field.second.name, field.second.content);
     }
-    result += "\"files\": [";
+    auto filesIndex = 0;
     for (const auto& file : form.files) {
-        result += "{\"name\": \"" + escape(file.second.name) + "\",";
-        result += "\"content\": \"" + escape(file.second.content) + "\",";
-        result += "\"filename\": \"" + escape(file.second.filename) + "\",";
-        result += "\"content_type\": \"" + escape(file.second.content_type) + "\"},";
+        auto fileJson = cppflask::JsonObject{};
+        fileJson.set("name", file.second.name);
+        fileJson.set("content", file.second.content);
+        fileJson.set("filename", file.second.filename);
+        fileJson.set("content_type", file.second.content_type);
+        result.set("files/" + std::to_string(filesIndex), fileJson);
     }
-    removeTrailingComma(result);
-    return result + "]}";
+    return result;
 }
-
 
 cppflask::JsonObject generateDataFromRequest(const httplib::Request& req) {
-    auto jsonString = std::string{"{"};
-    jsonString += "\"path\": \"" + req.path + "\",";
-    jsonString += createHeaders(req.headers) + ",";
-    jsonString += createGet(req.params) + ",";
-    jsonString += createForm(req.form);
-    return cppflask::JsonObject{jsonString + "}"};
-
+    auto json = cppflask::JsonObject{};
+    json.set("path", req.path);
+    auto [headers, cookies] = createHeaders(req.headers);
+    json.set("headers", headers);
+    json.set("cookies", cookies);
+    json.set("get", createObjectFromKeyValueList(req.params));
+    json.set("params", createObjectFromKeyValueList(req.path_params));
+    json.set("form", createForm(req.form));
+    return json;
 }
 
 void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const std::string& prefix = "/") {
@@ -120,6 +100,14 @@ void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const
             }
             case cppflask::RouteType::POST: {
                 server.Post(prefix + route->getName(), handleRoute);
+                break;
+            }
+            case cppflask::RouteType::PUT: {
+                server.Put(prefix + route->getName(), handleRoute);
+                break;
+            }
+            case cppflask::RouteType::DEL: {
+                server.Delete(prefix + route->getName(), handleRoute);
                 break;
             }
         }
