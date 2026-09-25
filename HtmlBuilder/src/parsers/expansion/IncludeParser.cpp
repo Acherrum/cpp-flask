@@ -1,4 +1,4 @@
-#include "../../../include/cppflask/html/parsers/combine/IncludeParser.h"
+#include "cppflask/html/parsers/expansion/IncludeParser.h"
 
 #include <fstream>
 #include <sstream>
@@ -21,7 +21,7 @@ namespace {
     }
 }
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> IncludeParser::parse(std::string& _html, const HtmlCommand& cmd) {
 
         auto includeContentPos = cmd.cmd.find('(');

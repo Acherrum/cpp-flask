@@ -1,4 +1,4 @@
-#include "cppflask/html/parsers/combine/BlocksParser.h"
+#include "cppflask/html/parsers/expansion/BlocksParser.h"
 
 #include "cppflask/html/HtmlCommand.h"
 
@@ -6,7 +6,7 @@ namespace {
 const std::string END_BLOCK_CMD{"{% end_block %}"};
 }
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> BlocksParser::parse(std::string& _html, const HtmlCommand& cmd) {
 
         auto endCommandPos = _html.find(END_BLOCK_CMD, cmd.endPos);

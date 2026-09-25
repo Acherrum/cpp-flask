@@ -1,4 +1,4 @@
-#include "cppflask/html/parsers/combine/ExtendsParser.h"
+#include "cppflask/html/parsers/expansion/ExtendsParser.h"
 
 #include <fstream>
 #include <sstream>
@@ -6,7 +6,7 @@
 #include "cppflask/html/nodes/ExtendsNode.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/html/nodes/HtmlNode.h"
-#include "cppflask/html/parsers/combine/BlocksEvaluator.h"
+#include "cppflask/html/parsers/expansion/BlocksEvaluator.h"
 
 namespace {
     std::string readFile(const std::string& filename) {
@@ -23,7 +23,7 @@ namespace {
     }
 }
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ExtendsParser::parse(std::string& _html, const HtmlCommand& cmd) {
 
         auto baseFilePos = cmd.cmd.find('(');

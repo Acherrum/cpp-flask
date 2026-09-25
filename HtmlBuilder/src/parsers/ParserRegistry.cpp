@@ -3,9 +3,9 @@
 #include "cppflask/html/parsers/conditional/ConditionalsParser.h"
 #include "cppflask/html/parsers/loop/LoopParser.h"
 #include "cppflask/html/parsers/setter/SetParser.h"
-#include "cppflask/html/parsers/combine/IncludeParser.h"
-#include "cppflask/html/parsers/combine/ExtendsParser.h"
-#include "cppflask/html/parsers/combine/BlocksParser.h"
+#include "cppflask/html/parsers/expansion/IncludeParser.h"
+#include "cppflask/html/parsers/expansion/ExtendsParser.h"
+#include "cppflask/html/parsers/expansion/BlocksParser.h"
 
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/nodes/HtmlNode.h"
@@ -31,8 +31,8 @@ namespace cppflask::html::parsers {
         registerParser<conditional::ConditionalsParser>();
         registerParser<loop::LoopParser>();
         registerParser<setter::SetParser>();
-        registerParser<IncludeParser>();
-        registerParser<ExtendsParser>();
-        registerParser<BlocksParser>();
+        registerParser<expansion::IncludeParser>();
+        registerParser<expansion::ExtendsParser>();
+        registerParser<expansion::BlocksParser>();
     }
 }

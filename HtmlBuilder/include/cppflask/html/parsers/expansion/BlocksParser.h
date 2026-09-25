@@ -8,7 +8,7 @@
 namespace cppflask::html {
     struct HtmlCommand;
 
-    namespace parsers {
+    namespace parsers::expansion {
         class BlocksParser {
         public:
             inline static const std::string TYPE{"BLOCK"};

@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
-#include "cppflask/html/parsers/combine/BlocksEvaluator.h"
+#include "cppflask/html/parsers/expansion/BlocksEvaluator.h"
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
 
 class BlocksEvaluatorTest : public testing::Test {};
 

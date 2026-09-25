@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
     class BlocksEvaluator {
     public:
         static void combine(const std::string& blocksDescription, std::string& target);

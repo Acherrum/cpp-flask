@@ -1,4 +1,4 @@
-#include "cppflask/html/parsers/combine/BlocksEvaluator.h"
+#include "cppflask/html/parsers/expansion/BlocksEvaluator.h"
 
 #include "cppflask/html/StringHelper.h"
 
@@ -18,7 +18,7 @@ std::string getBlockName(const std::string& command, size_t commandEndPos) {
 }
 }
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
 
     void BlocksEvaluator::combine(const std::string& blocksDescription, std::string& target) {
 

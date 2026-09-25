@@ -1,13 +1,13 @@
 
 #include "gtest/gtest.h"
 
-#include "cppflask/html/parsers/combine/ExtendsParser.h"
+#include "cppflask/html/parsers/expansion/ExtendsParser.h"
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/HtmlBuilder.h"
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::expansion {
 
 class ExtendsParserTest : public testing::Test {
 
