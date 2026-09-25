@@ -109,6 +109,7 @@ Thank you for understanding.
   - Add `extends` command to the HtmlBuilder suite.
   - Extend supported API routes (added PUT and DELETE).
   - Added support for `path_params`. These are now available in the request json as `params`.
+  - Improve `block` handling for passing blocks down files and allowing multiple definitions to append to each other (useful for `<script>` blocks per example).
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

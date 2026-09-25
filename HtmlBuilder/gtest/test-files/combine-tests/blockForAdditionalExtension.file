@@ -1,0 +1,5 @@
+{% extends (baseForExtendsTest.file) %}
+
+{% block insideBase %}This goes into base.
+
+[optional]{% block optionalExtension %}{% end_block %}[/optional]{% end_block %}

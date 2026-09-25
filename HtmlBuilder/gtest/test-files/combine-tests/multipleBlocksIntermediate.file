@@ -1,0 +1,3 @@
+{% extends (multipleBlocksBase.file) %}
+
+{% block one %}this is one{% end_block %}

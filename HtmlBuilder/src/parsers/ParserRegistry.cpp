@@ -5,6 +5,7 @@
 #include "cppflask/html/parsers/setter/SetParser.h"
 #include "cppflask/html/parsers/combine/IncludeParser.h"
 #include "cppflask/html/parsers/combine/ExtendsParser.h"
+#include "cppflask/html/parsers/combine/BlocksParser.h"
 
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/nodes/HtmlNode.h"
@@ -32,5 +33,6 @@ namespace cppflask::html::parsers {
         registerParser<setter::SetParser>();
         registerParser<IncludeParser>();
         registerParser<ExtendsParser>();
+        registerParser<BlocksParser>();
     }
 }

@@ -5,10 +5,13 @@
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/html/StringHelper.h"
+#include "cppflask/html/HtmlBuilder.h"
 
 namespace cppflask::html::parsers {
 
-class ExtendsParserTest : public testing::Test {};
+class ExtendsParserTest : public testing::Test {
+
+};
 
 TEST_F(ExtendsParserTest, multipleExtensions) {
     auto itBeginsHere = std::string{R"raw({% extends (extendsBase.file) %}
@@ -17,11 +20,36 @@ TEST_F(ExtendsParserTest, multipleExtensions) {
         Hello, world!
         {% end_block %}
     )raw"};
-    auto command = HtmlCommand{"{% extends (extendsBase.file) %}", 0, 32};
-    auto [position, node] = ExtendsParser::parse(itBeginsHere, command);
-    auto noDataNeeded = JsonObject{};
-    auto result = node->render(noDataNeeded);
+    auto result = HtmlBuilder::fromText(itBeginsHere).build();
     stripAll(result);
     ASSERT_EQ("[[\n-->\nHello,world!\n<--\n]]", result);
+}
+
+TEST_F(ExtendsParserTest, optionalBlockShouldNotThrowParseError_WhenUsed) {
+    auto itBeginsHere = std::string{R"raw({% extends (blockForAdditionalExtension.file) %}
+
+        {% block optionalExtension %}Optional block is used{% end_block %}
+    )raw"};
+    auto result = HtmlBuilder::fromText(itBeginsHere).build();
+    stripAll(result);
+    ASSERT_EQ("[[Thisgoesintobase.\n\n[optional]Optionalblockisused[/optional]]]", result);
+}
+
+TEST_F(ExtendsParserTest, optionalBlockShouldNotThrowParseError_WhenNotUsed) {
+    
+    auto result = HtmlBuilder::fromFile("blockForAdditionalExtension.file").build();
+    stripAll(result);
+    ASSERT_EQ("[[Thisgoesintobase.[optional][/optional]]]", result);
+}
+
+TEST_F(ExtendsParserTest, blocksCanBePassedDownTheLine) {
+    auto itBeginsHere = std::string{R"raw({% extends (multipleBlocksIntermediate.file) %}
+
+        {% block two %}This is two{% end_block %}
+    )raw"};
+    
+    auto result = HtmlBuilder::fromText(itBeginsHere).build();
+    stripAll(result);
+    ASSERT_EQ("1)thisisone\n2)Thisistwo", result);
 }
 }
