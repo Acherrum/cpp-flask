@@ -12,16 +12,10 @@ namespace {
 }
 
 Router::Router() : cppflask::Router{} {
-    addRoute(std::make_unique<SimpleRoute>("",
-        [&](JsonObject& req) {
-            req.set("params/rows", 0L);
-            return homeBuilder.buildWithData(req);
-        }));
-    addRoute(std::make_unique<SimpleRoute>("show/:rows",
+    addRoute(std::make_unique<SimpleRoute>(":rows",
         [&](JsonObject& req) {
             return homeBuilder.buildWithData(req);
         }));
 }
 
 Router::~Router() = default;
-

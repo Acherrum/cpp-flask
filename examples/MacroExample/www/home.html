@@ -7,9 +7,9 @@
 </head>
 <body>
 
-{% if ($params/rows == 0) %}
-    Navigate to /show/{someNumber} to see something cool.<br />
-    Try something like <a href="show/15">http://localhost:8080/show/15</a>
+{% if ($params/rows == "") %}
+    Navigate to /{someNumber} to see something cool.<br />
+    Try something like <a href="/15">http://localhost:8080/15</a>
 {% else %}
 
     {% macro blocks from (www/macros.html) %}
