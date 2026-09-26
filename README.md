@@ -96,6 +96,10 @@ For now, I will not accept any contributions.
 Feel free to fork, but this is, for the time being, something to keep myself busy.
 Thank you for understanding. 
 
+### Known issues
+
+- Macros in loops do not work at the moment.
+
 ## Version history
 
 - **0.4.0** TBD
@@ -110,6 +114,7 @@ Thank you for understanding.
   - Extend supported API routes (added PUT and DELETE).
   - Added support for `path_params`. These are now available in the request json as `params`.
   - Improve `block` handling for passing blocks down files and allowing multiple definitions to append to each other (useful for `<script>` blocks per example).
+  - Added macro functionality
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

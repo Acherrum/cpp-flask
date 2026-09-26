@@ -4,6 +4,23 @@
 #include <algorithm>
 
 namespace cppflask::html {
+inline std::size_t rfind_first_not_of(const std::string& input, const std::string& characters) {
+    auto end = input.rbegin();
+    for (; end != input.rend(); end++) {
+        bool hasMatch = false;
+        for (const auto& c : characters) {
+            if (*end == c) {
+                hasMatch = true;
+                break;
+            }
+        }
+        if (!hasMatch) {
+            break;
+        }
+    }
+    return end == input.rend() ? std::string::npos : input.rend() - end;
+}
+
 /**
  * Strip all characters matching 'character' from the input string.
  * @param input
@@ -34,22 +51,22 @@ inline std::string stripAll(const std::string& input, char character = ' ') {
  * @param input
  * @param character
  */
-inline void trim(std::string& input, char character = ' ') {
-    input.erase(input.begin(), std::ranges::find_if(input, [character](const unsigned char ch) {
-        return ch != character;
-    }));
-    input.erase(std::find_if(input.rbegin(), input.rend(), [character](const unsigned char ch) {
-        return ch != character;
-    }).base(), input.end());
+inline void trim(std::string& input, const std::string& characters = " \n\r\t") {
+
+    input.erase(0, input.find_first_not_of(characters));
+    auto endOfText = rfind_first_not_of(input, characters);
+    if (endOfText < input.length()) {
+        input.erase(endOfText);
+    }
 }
 
-/**
- * @see strip(std::string& input, char character = ' ')
- */
-inline std::string trim(const std::string& input, const char character = ' ') {
-    
+    /**
+     * @see trim(std::string& input, std::String character = " \n\r\t")
+     */
+inline std::string trim(const std::string& input, const std::string& characters = " \n\r\t") {
+
     auto copy = input;
-    trim(copy, character);
+    trim(copy, characters);
     return copy;
 }
 
