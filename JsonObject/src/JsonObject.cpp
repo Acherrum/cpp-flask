@@ -1,5 +1,7 @@
 #include "cppflask/JsonObject.h"
 
+#include <iostream>
+
 #include "rapidjson/document.h"
 #include "rapidjson/pointer.h"
 #include "rapidjson/writer.h"
@@ -13,8 +15,6 @@ struct PImpl {
 
     PImpl(rapidjson::Document* root, rapidjson::Value* value) :
         _root{root}, _doc{nullptr}, _value{value} {}
-
-    PImpl(const PImpl& other) : _root{other._root}, _doc{nullptr}, _value{other._value} {}
 
     [[nodiscard]] rapidjson::Value& get() const {
         if (_value == nullptr) {
@@ -76,14 +76,7 @@ JsonObject::~JsonObject() = default;
 
 JsonObject::JsonObject(std::unique_ptr<PImpl> pimpl) : _pimpl{std::move(pimpl)} {}
 
-JsonObject::JsonObject(const JsonObject& other) : _pimpl{std::make_unique<PImpl>(*other._pimpl)} {}
-
 JsonObject::JsonObject(JsonObject&& other) noexcept  : _pimpl{std::move(other._pimpl)} {}
-
-JsonObject& JsonObject::operator=(const JsonObject& other) {
-    _pimpl = std::make_unique<PImpl>(*other._pimpl);
-    return *this;
-}
 
 JsonObject& JsonObject::operator=(JsonObject&& other) noexcept {
     _pimpl = std::move(other._pimpl);

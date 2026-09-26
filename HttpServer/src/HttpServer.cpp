@@ -19,8 +19,6 @@ void parseCookies(const std::string& cookies, std::unordered_map<std::string, st
         size_t start = keyValue.find_first_not_of(' ');
         if (start == std::string::npos) continue;
         keyValue = keyValue.substr(start);
-
-        // 3. Split the single pair by '='
         size_t assignmentPos = keyValue.find('=');
         if (assignmentPos != std::string::npos) {
             jar.emplace(keyValue.substr(0, assignmentPos), keyValue.substr(assignmentPos + 1));
@@ -47,7 +45,7 @@ std::pair<cppflask::JsonObject, cppflask::JsonObject> createHeaders(const httpli
             headerJson.set(entry.first, entry.second);
         }
     }
-    return { headerJson, createObjectFromKeyValueList(jar) };
+    return { std::move(headerJson), std::move(createObjectFromKeyValueList(jar)) };
 }
 
 

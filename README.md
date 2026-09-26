@@ -116,6 +116,7 @@ None yet. Please let me know if you encounter anything.
   - Improve `block` handling for passing blocks down files and allowing multiple definitions to append to each other (useful for `<script>` blocks per example).
   - Added macro functionality
   - Added Macro example.
+  - Removed copy constructors of `JsonObject`, since these are prone to cause bugs.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

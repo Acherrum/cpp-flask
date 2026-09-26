@@ -15,9 +15,9 @@ public:
 
     explicit JsonObject(std::unique_ptr<PImpl> pimpl);
 
-    JsonObject(const JsonObject&);
+    JsonObject(const JsonObject&) = delete;
     JsonObject(JsonObject&&) noexcept;
-    JsonObject& operator=(const JsonObject&);
+    JsonObject& operator=(const JsonObject&) = delete;
     JsonObject& operator=(JsonObject&&) noexcept;
 
     [[nodiscard]] std::string getValue(const std::string& key, const std::string& defaultReturnValue) const;
