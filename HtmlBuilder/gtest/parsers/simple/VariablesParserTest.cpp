@@ -4,7 +4,7 @@
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/HtmlCommand.h"
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::simple {
 
 class VariablesParserTest : public testing::Test {};
 

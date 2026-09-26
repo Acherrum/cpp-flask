@@ -1,20 +1,16 @@
 #include "cppflask/html/nodes/LoopNode.h"
 
 #include "cppflask/html/HtmlBuilder.h"
-#include "cppflask/html/parsers/simple/VariablesParser.h"
+#include "cppflask/html/parsers/simple/SimpleParser.h"
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/HtmlCommand.h"
 
-using cppflask::html::parsers::VariablesParser;
+using cppflask::html::HtmlCommand;
+using cppflask::html::parsers::simple::SimpleParser;
+
 namespace {
-    std::string parseVariableToHtml(const std::string &variable, const std::string &replacement, std::string loopContentForThisIteration, std::string::size_type varPos, unsigned long endVarPos) {
-        auto command = cppflask::html::HtmlCommand{
-            loopContentForThisIteration.substr(varPos, endVarPos - endVarPos),
-            varPos,
-            endVarPos
-        };
-        auto [newEndPos, variableNode] = VariablesParser::parse(loopContentForThisIteration, command);
-        endVarPos = newEndPos;
+    std::string parseVariableToHtml(const std::string &variable, const std::string &replacement, std::string loopContentForThisIteration, const HtmlCommand& command) {
+        auto [newEndPos, variableNode] = SimpleParser::parse(loopContentForThisIteration, command);
         auto json = cppflask::JsonObject{"{\"" + variable + "\": \"" + replacement + "\"}"};
         return variableNode->render(json);
     }
@@ -30,7 +26,16 @@ std::string replaceLoopVariable(const std::string& loopContent, const std::strin
             if (bracesPos != std::string::npos && varPos == loopContentForThisIteration.find_first_not_of(' ', bracesPos + 2)) {
                 varPos = bracesPos;
                 endVarPos = loopContentForThisIteration.find("}}", varPos) + 2;
-                replacement = parseVariableToHtml(variable, replacement , loopContentForThisIteration, varPos, endVarPos);
+                replacement = parseVariableToHtml(
+                    variable, 
+                    replacement , 
+                    loopContentForThisIteration,
+                    HtmlCommand{
+                        loopContentForThisIteration.substr(varPos, endVarPos - endVarPos),
+                        varPos,
+                        endVarPos
+                    }
+                );
             }
         }
         loopContentForThisIteration.replace(varPos, endVarPos - varPos, replacement);

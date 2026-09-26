@@ -1,0 +1,9 @@
+{% macro print(message) %}{{ $message }}{% end_macro %}
+
+{% macro banner(rows, columns, message) %}
+    {% for (row = 0 to $rows) %}
+        {% for (col = 0 to $columns) %}
+            {{ print("$message => [$row, $col]") }}
+        {% end_for %}
+    {% end_for %}
+{% end_macro %}

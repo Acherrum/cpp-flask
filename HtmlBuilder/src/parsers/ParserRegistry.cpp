@@ -6,7 +6,10 @@
 #include "cppflask/html/parsers/expansion/IncludeParser.h"
 #include "cppflask/html/parsers/expansion/ExtendsParser.h"
 #include "cppflask/html/parsers/expansion/BlocksParser.h"
+#include "cppflask/html/parsers/expansion/MacroParser.h"
+#include "cppflask/html/parsers/simple/SimpleParser.h"
 
+#include "cppflask/html/parsers/MacroRegistry.h"
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/nodes/HtmlNode.h"
 
@@ -18,12 +21,21 @@ namespace cppflask::html::parsers {
 
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> ParserRegistry::parse(std::string &html, const HtmlCommand &command) {
 
-        for (const auto& [type, parser] : get()._registry) {
-            if (contains(command.cmd, std::string{" " + type + " "})) {
-                return parser(html, command);
+        if (command.cmd.find("{{") == 0) {
+            return simple::SimpleParser::parse(html, command);
+        } else {
+            for (const auto& [type, parser] : get()._registry) {
+                if (contains(command.cmd, std::string{" " + type + " "})) {
+                    return parser(html, command);
+                }
             }
+            return {command.endPos, std::make_unique<nodes::HtmlNode>("<b>Parse error:</b> No parser found for: " + command.cmd)};
         }
-        return {command.endPos, std::make_unique<nodes::HtmlNode>("<b>Parse error:</b> No parser found for: " + command.cmd)};
+    }
+
+    void ParserRegistry::finish() {
+        
+        MacroRegistry::clear();
     }
 
     ParserRegistry::ParserRegistry() {
@@ -34,5 +46,6 @@ namespace cppflask::html::parsers {
         registerParser<expansion::IncludeParser>();
         registerParser<expansion::ExtendsParser>();
         registerParser<expansion::BlocksParser>();
+        registerParser<expansion::MacroParser>();
     }
 }

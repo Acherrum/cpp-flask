@@ -10,8 +10,7 @@ namespace {
 
 namespace cppflask::html::parsers::conditional {
 ExpressionEvaluator::ExpressionEvaluator(const std::string &multiExpression) :
-    _expression{parseExpression(multiExpression)}
-{
+    _expression{parseExpression(multiExpression)} {
 }
 
 bool ExpressionEvaluator::evaluate(const JsonObject &data) const
@@ -39,13 +38,13 @@ ExpressionEvaluator::MultiExpression ExpressionEvaluator::parseExpression(const 
         return { fullExpression, LogicOperator::None, ""};
     }
     if (andPos < orPos) {
-        auto left = strip(fullExpression.substr(0, andPos));
-        auto right = strip(fullExpression.substr(andPos + AND_STR.length()));
+        auto left = trim(fullExpression.substr(0, andPos));
+        auto right = trim(fullExpression.substr(andPos + AND_STR.length()));
         return {left, LogicOperator::And, right};
     }
 
-    auto left = strip(fullExpression.substr(0, orPos));
-    auto right = strip(fullExpression.substr(orPos + OR_STR.length()));
+    auto left = trim(fullExpression.substr(0, orPos));
+    auto right = trim(fullExpression.substr(orPos + OR_STR.length()));
     return {left, LogicOperator::Or, right};
 }
 

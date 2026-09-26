@@ -4,7 +4,7 @@
 
 using cppflask::html::contains;
 using cppflask::html::find;
-using cppflask::html::strip;
+using cppflask::html::trim;
 
 namespace {
 const std::string BLOCK_CMD{" block "};
@@ -12,8 +12,7 @@ const std::string END_BLOCK_CMD{"{% end_block %}"};
 
 std::string getBlockName(const std::string& command, size_t commandEndPos) {
     auto nameStartPos = find(command, BLOCK_CMD) + BLOCK_CMD.length();
-    auto blockName = command.substr(nameStartPos, commandEndPos - nameStartPos);
-    strip(blockName);
+    auto blockName = trim(command.substr(nameStartPos, commandEndPos - nameStartPos));
     return blockName;
 }
 }

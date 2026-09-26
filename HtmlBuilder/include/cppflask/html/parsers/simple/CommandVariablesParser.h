@@ -5,7 +5,7 @@
 namespace cppflask {
 class JsonObject;
 
-namespace html::parsers {
+namespace html::parsers::simple {
 class CommandVariablesParser {
 public:
     explicit CommandVariablesParser(std::string& html);

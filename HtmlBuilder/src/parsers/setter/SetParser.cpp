@@ -9,12 +9,10 @@
 namespace cppflask::html::parsers::setter {
 
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> SetParser::parse(std::string&, const HtmlCommand& cmd) {
-        // Extract the content between {% SET and %}
         std::string content = cmd.cmd;
         stripAll(content);
         content = content.substr(find(content, "SET") + 3, content.length()-7);
 
-        // Parse "variable = expression"
         size_t eqPos = content.find('=');
         if (eqPos == std::string::npos) {
             return {cmd.endPos, std::make_unique<nodes::HtmlNode>("")};

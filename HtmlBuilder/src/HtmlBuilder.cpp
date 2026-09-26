@@ -9,7 +9,6 @@
 
 #include "cppflask/JsonObject.h"
 #include "cppflask/html/parsers/ParserRegistry.h"
-#include "cppflask/html/parsers/simple/VariablesParser.h"
 
 using cppflask::JsonObject;
 using cppflask::html::HtmlCommand;
@@ -58,34 +57,40 @@ namespace {
                 }
             }
 
+            auto endCommandPos = std::string::npos;
+            auto command = std::string{};
             if (nextChar == '{') {
-                auto endCommandPos = html.find("}}", startCommandPos) + 2;
-                auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
-                auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                auto [endOfParsedData, node] = cppflask::html::parsers::VariablesParser::parse(html, cmd);
-                nodes.emplace_back(std::move(node));
-                html.erase(startCommandPos, endOfParsedData - startCommandPos);
-            } else {
-                auto endCommandPos = html.find("%}", startCommandPos);
+                endCommandPos = html.find("}}", startCommandPos);
                 if (endCommandPos == std::string::npos) {
                     nodes.emplace_back(std::make_unique<HtmlNode>("<b>Parse error:</b> missing closing characters ('%}') for command."));
                     return nodes;
                 }
-                endCommandPos += 2;
-                auto command = html.substr(startCommandPos, endCommandPos-startCommandPos);
-                auto cmd = HtmlCommand{command, startCommandPos, endCommandPos};
-                auto [endOfParsedData, node] = ParserRegistry::parse(html, cmd);
-                if (node != nullptr) {
-                    nodes.emplace_back(std::move(node));
-                    html.erase(startCommandPos, endOfParsedData - startCommandPos);
-                }
+            } else {
+                endCommandPos = html.find("%}", startCommandPos);
             }
+
+            if (endCommandPos == std::string::npos) {
+                nodes.emplace_back(std::make_unique<HtmlNode>("<b>Parse error:</b> missing closing characters ('%}') for command."));
+                return nodes;
+            }
+            endCommandPos += 2;
+            command = html.substr(startCommandPos, endCommandPos-startCommandPos);
+
+            auto [endOfParsedData, node] = ParserRegistry::parse(html, HtmlCommand{command, startCommandPos, endCommandPos});
+            
+            if (node != nullptr) {
+                nodes.emplace_back(std::move(node));
+                html.erase(startCommandPos, endOfParsedData - startCommandPos);
+            }
+
             startCommandPos = html.find('{');
         }
 
         if (!html.empty()) {
             nodes.emplace_back(std::make_unique<HtmlNode>(html));
         }
+
+        ParserRegistry::finish();
 
         return nodes;
     }

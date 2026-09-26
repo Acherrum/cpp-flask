@@ -7,7 +7,7 @@
 #include "cppflask/html/HtmlCommand.h"
 
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::simple {
 
 std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> VariablesParser::parse(std::string& html, const HtmlCommand& cmd)
 {

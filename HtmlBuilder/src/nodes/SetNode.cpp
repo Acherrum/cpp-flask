@@ -201,7 +201,7 @@ SetNode::~SetNode() = default;
 std::string SetNode::render(JsonObject& data) const {
 
     auto tempExpr = _expression;
-    parsers::CommandVariablesParser{tempExpr}.parse(data);
+    parsers::simple::CommandVariablesParser{tempExpr}.parse(data);
 
     if (!tempExpr.empty() && (tempExpr.front() == '"' || tempExpr.front() == '\'')) {
         data.set(_key, parseStringLiteral(tempExpr));

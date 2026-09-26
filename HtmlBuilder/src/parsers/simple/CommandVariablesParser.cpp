@@ -5,7 +5,7 @@
 #include "cppflask/JsonObject.h"
 
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::simple {
 CommandVariablesParser::CommandVariablesParser(std::string& html) : _html{html}
 {
 }

@@ -104,8 +104,7 @@ TEST_F(HtmlBuilderTest, OneBuilder_DifferentDataCalls) {
 TEST_F(HtmlBuilderTest, CaseInsensitiveTest) {
 
     auto builder = HtmlBuilder::fromFile("caseInsensitiveTest.file");
-    auto data = JsonObject();
-    auto result = builder.buildWithData(data);
+    auto result = builder.build();
     stripAll(result, '\n');
     ASSERT_EQ(result, "neither1 is odd2 is even3 is odd4 is even5 is odd");
 }

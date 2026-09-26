@@ -17,11 +17,24 @@ inline void stripAll(std::string& input, char character = ' ') {
 }
 
 /**
- * Strip characters matching 'character' from the beginning and end of the input string.
+ * Strip all characters matching 'character' from the input string.
+ * @param input
+ * @param character
+ * @returns copy of the input string with all 'character' stripped.
+ */
+inline std::string stripAll(const std::string& input, char character = ' ') {
+
+    auto copy = input;
+    stripAll(copy);
+    return copy;
+}
+
+/**
+ * Trim characters matching 'character' from the beginning and end of the input string.
  * @param input
  * @param character
  */
-inline void strip(std::string& input, char character = ' ') {
+inline void trim(std::string& input, char character = ' ') {
     input.erase(input.begin(), std::ranges::find_if(input, [character](const unsigned char ch) {
         return ch != character;
     }));
@@ -33,10 +46,10 @@ inline void strip(std::string& input, char character = ' ') {
 /**
  * @see strip(std::string& input, char character = ' ')
  */
-inline std::string strip(const std::string& input, const char character = ' ') {
+inline std::string trim(const std::string& input, const char character = ' ') {
     
     auto copy = input;
-    strip(copy, character);
+    trim(copy, character);
     return copy;
 }
 

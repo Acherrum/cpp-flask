@@ -93,7 +93,7 @@ TEST_F(LoopParserTest, ClassicForLoop_UsingBothVariables) {
 
 TEST_F(LoopParserTest, ForEachLoop) {
     auto command = std::string{"{% FOR (el IN $array) %}"};
-    auto html = std::string{R"raw({% FOR (el IN $array) %}{{ $el/name }} is {{ $el/job}}.<br />{% END_FOR %})raw"};
+    auto html = std::string{R"raw({% FOR (el IN $array) %}{{ $el/name }} is {{ $el/job }}.<br />{% END_FOR %})raw"};
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };
@@ -105,7 +105,7 @@ TEST_F(LoopParserTest, ForEachLoop) {
 
 TEST_F(LoopParserTest, ForEachLoop_EmptyList) {
     auto command = std::string{"{% FOR (el IN $array) %}"};
-    auto html = std::string{R"raw({% FOR (el IN $array) %}{{ $el/name }} is {{ $el/age}} years old.<br />{% END_FOR %})raw"};
+    auto html = std::string{R"raw({% FOR (el IN $array) %}{{ $el/name }} is {{ $el/age }} years old.<br />{% END_FOR %})raw"};
     auto cmd = HtmlCommand{
         command, 0, command.length()
     };

@@ -5,6 +5,8 @@
 #include "cppflask/html/FilterRegistry.h"
 #include "cppflask/html/HtmlCommand.h"
 
+using cppflask::html::parsers::simple::VariablesParser;
+
 namespace cppflask::html::nodes {
     class PipedVariableNodeTest : public testing::Test {
     };
@@ -13,7 +15,7 @@ namespace cppflask::html::nodes {
 
         auto html = std::string{"{{ $test | doesNotExist }}"};
         auto command = HtmlCommand{html,0,html.length()};
-        auto [dontCare, node] = parsers::VariablesParser::parse(html, command);
+        auto [dontCare, node] = VariablesParser::parse(html, command);
 
         auto json = JsonObject(R"raw({"test":[1,2,3,4]})raw");
         auto result = node->render(json);
@@ -28,9 +30,9 @@ namespace cppflask::html::nodes {
 
         auto html = std::string{"{{ $test | getArrayLength }}"};
         auto command = HtmlCommand{html,0,html.length()};
-        auto [dontCare, node] = parsers::VariablesParser::parse(html, command);
+        auto [dontCare, node] = VariablesParser::parse(html, command);
 
-        auto json = JsonObject(R"raw({"test":[1,2,3,4]})raw");
+        auto json = JsonObject(R"raw({"test":[1,3,3,7]})raw");
         auto result = node->render(json);
         ASSERT_EQ("4", result);
     }

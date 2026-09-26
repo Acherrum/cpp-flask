@@ -3,7 +3,7 @@
 #include "cppflask/html/parsers/simple/CommandVariablesParser.h"
 #include "cppflask/JsonObject.h"
 
-namespace cppflask::html::parsers {
+namespace cppflask::html::parsers::simple {
 
 class CommandVariablesParserTest : public testing::Test {};
 
