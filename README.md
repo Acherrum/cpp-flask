@@ -115,6 +115,7 @@ None yet. Please let me know if you encounter anything.
   - Added support for `path_params`. These are now available in the request json as `params`.
   - Improve `block` handling for passing blocks down files and allowing multiple definitions to append to each other (useful for `<script>` blocks per example).
   - Added macro functionality
+  - Added Macro example.
 
 - **0.3.0** 2026-09-16
   - Made commands case-insensitive.

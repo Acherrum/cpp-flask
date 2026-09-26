@@ -1,0 +1,7 @@
+{% macro blocks(columns) %}
+<div class="grid-container">
+{% for (row = 0 to $columns) %}
+    <div class="square-block">{{ $row }}</div>
+{% end_for %}
+</div>
+{% end_macro %}

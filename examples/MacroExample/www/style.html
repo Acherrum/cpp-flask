@@ -1,0 +1,28 @@
+<style>
+    .grid-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: nowrap;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+    }
+    .square-block {
+        border-radius: 8px;
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-family: sans-serif;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+    .square-block:nth-child(odd) {
+        background-color: #4f46e5;
+    }
+    .square-block:nth-child(even) {
+        background-color: #10b981;
+    }
+</style>
