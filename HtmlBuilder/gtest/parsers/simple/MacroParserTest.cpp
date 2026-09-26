@@ -32,17 +32,15 @@ TEST_F(SimpleMacroParserTest, MultipleMacroCallsWithData) {
     ASSERT_EQ("1 2 3", result);
 }
 
-TEST_F(SimpleMacroParserTest, DISABLED_MultipleArgumentsWithData) {
+TEST_F(SimpleMacroParserTest, MultipleArgumentsWithData_MacroInMacro) {
 
-    auto data = JsonObject{R"({"one": 2, "two": 2, "three": "hello"})"};
+    auto data = JsonObject{R"({"one": 2, "two": 2, "three": "Hello"})"};
     auto result = HtmlBuilder::fromText(R"raw(
-    {% macro banner from (macroTest.file) %}
+        {% macro banner from (macroTest.file) %}
 
-    {{ banner($one, $two, $three) }}
-    )raw").buildWithData(data);
+        {{ banner($one, $two, $three) }}
+        )raw").buildWithData(data);
     trim(result);
-    ASSERT_EQ("Hello => [0, 0]Hello => [0, 1]Hello => [1, 0]Hello => [1, 1]", result);
+    ASSERT_EQ("Hello => [0, 0]                                Hello => [0, 1]                                            Hello => [1, 0]                                Hello => [1, 1]", result);
 }
-
-
 }

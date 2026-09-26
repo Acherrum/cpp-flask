@@ -10,16 +10,16 @@ namespace cppflask::html::parsers::setter {
 
     std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> SetParser::parse(std::string&, const HtmlCommand& cmd) {
         std::string content = cmd.cmd;
-        stripAll(content);
-        content = content.substr(find(content, "SET") + 3, content.length()-7);
+        auto contentStartPos = find(content, "SET") + 3;
+        content = content.substr(contentStartPos, content.rfind("%}") - contentStartPos);
 
         size_t eqPos = content.find('=');
         if (eqPos == std::string::npos) {
             return {cmd.endPos, std::make_unique<nodes::HtmlNode>("")};
         }
 
-        std::string varName = content.substr(0, eqPos);
-        std::string expr = content.substr(eqPos + 1);
+        std::string varName = trim(content.substr(0, eqPos));
+        std::string expr = trim(content.substr(eqPos + 1));
 
         if (varName.empty() || expr.empty()) {
             return {cmd.endPos, std::make_unique<nodes::HtmlNode>("")};

@@ -1,53 +1,11 @@
 #include "cppflask/html/nodes/LoopNode.h"
 
 #include "cppflask/html/HtmlBuilder.h"
-#include "cppflask/html/parsers/simple/SimpleParser.h"
 #include "cppflask/JsonObject.h"
-#include "cppflask/html/HtmlCommand.h"
-
-using cppflask::html::HtmlCommand;
-using cppflask::html::parsers::simple::SimpleParser;
-
-namespace {
-    std::string parseVariableToHtml(const std::string &variable, const std::string &replacement, std::string loopContentForThisIteration, const HtmlCommand& command) {
-        auto [newEndPos, variableNode] = SimpleParser::parse(loopContentForThisIteration, command);
-        auto json = cppflask::JsonObject{"{\"" + variable + "\": \"" + replacement + "\"}"};
-        return variableNode->render(json);
-    }
-
-std::string replaceLoopVariable(const std::string& loopContent, const std::string& variable, const std::string& newValue) {
-    auto loopContentForThisIteration = loopContent;
-    auto varPos = loopContentForThisIteration.find("$" + variable);
-    auto replacement = newValue;
-    while (varPos != std::string::npos) {
-        auto endVarPos = varPos + 1 + variable.length();
-        if (replacement.at(0) != '$') {
-            auto bracesPos = loopContentForThisIteration.rfind("{{", varPos);
-            if (bracesPos != std::string::npos && varPos == loopContentForThisIteration.find_first_not_of(' ', bracesPos + 2)) {
-                varPos = bracesPos;
-                endVarPos = loopContentForThisIteration.find("}}", varPos) + 2;
-                replacement = parseVariableToHtml(
-                    variable, 
-                    replacement , 
-                    loopContentForThisIteration,
-                    HtmlCommand{
-                        loopContentForThisIteration.substr(varPos, endVarPos - endVarPos),
-                        varPos,
-                        endVarPos
-                    }
-                );
-            }
-        }
-        loopContentForThisIteration.replace(varPos, endVarPos - varPos, replacement);
-        varPos = loopContentForThisIteration.find("$" + variable, varPos + replacement.length());
-    }
-    return loopContentForThisIteration;
-}
-}
 
 namespace cppflask::html::nodes {
 
-LoopNode::LoopNode(parsers::loop::LoopSettings settings, std::string contents) :
+LoopNode::LoopNode(parsers::loop::LoopSettings settings, HtmlBuilder contents) :
     BaseNode("Loop",""),
     _settings(std::move(settings)),
     _contents(std::move(contents)) {
@@ -73,12 +31,13 @@ std::string LoopNode::render(JsonObject& data) const
     }
 
     for (long long i = start; i < end; i++) {
-        auto newValue = std::to_string(i);
+        auto index = std::to_string(i);
         if (!_settings.dataVar.empty()) {
-            newValue = std::string{"$"}.append(_settings.dataVar).append("/").append(newValue);
+            data.set(_settings.variable, data.get(_settings.dataVar + "/" + index));
+        } else {
+            data.set(_settings.variable, index);
         }
-        result += HtmlBuilder::fromText(replaceLoopVariable(_contents, _settings.variable, newValue))
-            .buildWithData(data);
+        result += _contents.buildWithData(data);
     }
 
     return result;

@@ -4,6 +4,7 @@
 #include "cppflask/html/parsers/loop/LoopSettings.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/JsonObject.h"
+#include "cppflask/html/HtmlBuilder.h"
 
 #include "cppflask/html/nodes/HtmlNode.h"
 #include "cppflask/html/nodes/LoopNode.h"
@@ -50,7 +51,10 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> LoopParser::parse(std::
     }
     auto expression = cmd.cmd.substr(beginStatement, endStatement - beginStatement);
     auto settings = ExpressionEvaluator::evaluate(expression);
-    auto loopContent = _html.substr(cmd.endPos, endPos - cmd.endPos);
-    return {endPos + endCommand.length(), std::make_unique<nodes::LoopNode>(settings, loopContent)};
+    return {endPos + endCommand.length(),
+        std::make_unique<nodes::LoopNode>(
+            settings,
+        HtmlBuilder::fromText(_html.substr(cmd.endPos, endPos - cmd.endPos))
+        )};
 }
 }

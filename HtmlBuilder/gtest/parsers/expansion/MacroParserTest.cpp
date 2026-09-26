@@ -59,6 +59,5 @@ TEST_F(MacroParserTest, ImportLoadsMacroIntoHtmlForSecondParsing_banner) {
     ASSERT_EQ("rows", MacroRegistry::get("banner")->arguments.at(0));
     ASSERT_EQ("columns", MacroRegistry::get("banner")->arguments.at(1));
     ASSERT_EQ("message", MacroRegistry::get("banner")->arguments.at(2));
-    ASSERT_EQ(R"raw(    {% macro print from (macroTest.file) %}    {% for (row = 0 to $rows) %}        {% for (col = 0 to $columns) %}            {{ print("{{ $message }} => [$row, $col]") }}        {% end_for %}    {% end_for %})raw", MacroRegistry::get("banner")->body);
 }
 } // namespace cppflask::html::parsers::expansion

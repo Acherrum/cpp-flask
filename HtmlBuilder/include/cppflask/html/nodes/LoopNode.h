@@ -5,16 +5,14 @@
 #include <string>
 #include <memory>
 
+#include "cppflask/html/HtmlBuilder.h"
 #include "cppflask/html/parsers/loop/ExpressionEvaluator.h"
 
-namespace cppflask::html {
-class HtmlBuilder;
-
-namespace nodes {
+namespace cppflask::html::nodes {
 
 class LoopNode : public BaseNode {
 public:
-    LoopNode(parsers::loop::LoopSettings settings, std::string contents);
+    LoopNode(parsers::loop::LoopSettings settings, HtmlBuilder contents);
 
     ~LoopNode() override;
 
@@ -22,12 +20,10 @@ public:
 
 private:
     parsers::loop::LoopSettings _settings;
-    std::string _contents;
+    HtmlBuilder _contents;
 
     long long getLoopStart(JsonObject& data) const;
     long long getLoopEnd(JsonObject& data) const;
 };
-
-}
 
 }

@@ -43,7 +43,7 @@ std::vector<std::string> getArguments(const std::string& argumentsDefinition) {
 }
 
 namespace cppflask::html::parsers::simple {
-std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> MacroParser::parse(std::string& html, const HtmlCommand& cmd) {
+std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> MacroParser::parse(std::string&, const HtmlCommand& cmd) {
         
     auto macroNameStartPos = cmd.cmd.find_first_not_of(' ', 2);
     auto macroNameEndPos = cmd.cmd.find_first_of(" (", macroNameStartPos + 1);

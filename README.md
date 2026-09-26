@@ -98,7 +98,7 @@ Thank you for understanding.
 
 ### Known issues
 
-- Macros in loops do not work at the moment.
+None yet. Please let me know if you encounter anything.
 
 ## Version history
 
