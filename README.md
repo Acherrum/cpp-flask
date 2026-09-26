@@ -16,14 +16,15 @@ The internal libraries are
    - Offers a static `run` method to just make the server run with your router.
    - Offers `Router`, `Route` and `SimpleRoute` classes, to limit boilerplate code.
 2. HtmlBuilder
-   - Conditionals (if, else if, else)
-   - Loops (classic for-loop and for .. in .. )
-   - Variables (fetched from JsonObject)
-   - Setting custom variables (when you want to calculate something in the frontend)
-   - Including other files (keep things DRY)
-   - Extending other files (making dropping content in a standard layout much easier).
+   - Conditionals (`if`, `else if`, `else`).
+   - Loops (`for x to y`, `for el in list`).
+   - Variables (headers, cookies, path params, forms etc. all easily accessible via JSON URIs).
+   - Creating variables from within your HTML (`set`).
+   - Drop in other files for reusability (`include`).
+   - Extending other files for more convenient user interface design (`extends` and `block`).
+   - Use macros to create reusable and variable code blocks (`macro`).
 3. JsonObject
-   - A user-friendly wrapper-object around RapidJSON
+   - A user-friendly wrapper-object around RapidJSON.
 
 Because this structure is mostly for internal architecture (keeping things organized),
 a single target will be available for end-users upon installation: CppFlask.
@@ -50,7 +51,7 @@ include(FetchContent)
 FetchContent_Declare(
         CppFlask
         GIT_REPOSITORY https://github.com/acherrum/cpp-flask.git
-        GIT_TAG        v0.3.0
+        GIT_TAG        v0.4.0
         GIT_SHALLOW    TRUE
 )
 
@@ -61,14 +62,11 @@ And then simply link against `CppFlask`.
 
 ## Examples
 
-In the examples directory, a simple Hello World project is set up.
-The way it works:
+In the examples directory, a couple of examples are created, showing a lot of the flexibility of the framework.
 
-- An executable is created, which runs the server.
-- The main method creates the HttpServer backend and injects a custom Router.
-- The Router describes the different API routes that are possible.
-  - At the time of writing, only get/post actions are implemented.
-- Information from forms is automatically passed into a JsonObject, for ease of use.
+- The main.cpp is the entry point.
+- A very simple Router class describes the available API.
+- Some HTML files show some of the programmable HTML.
 
 ## Credits
 
@@ -102,7 +100,7 @@ None yet. Please let me know if you encounter anything.
 
 ## Version history
 
-- **0.4.0** TBD
+- **0.4.0** 2026-09-26
   - Fixed an issue setting multiple cookies.
   - Added SimpleRoute class to remove unnecessary class creation for simple routes.
   - Cleaned up parser handling (more SOLID), breaking INCLUDE commands: use `include (` instead of `include(`.
