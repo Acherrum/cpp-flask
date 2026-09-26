@@ -100,6 +100,9 @@ None yet. Please let me know if you encounter anything.
 
 ## Version history
 
+- **0.4.1** 2026-09-26
+  - Patched workflow file to use Ubuntu-26.04 because of C++23 requirement.
+
 - **0.4.0** 2026-09-26
   - Fixed an issue setting multiple cookies.
   - Added SimpleRoute class to remove unnecessary class creation for simple routes.
