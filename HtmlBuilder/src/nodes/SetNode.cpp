@@ -3,11 +3,13 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
+#include <iostream>
 
 #include "cppflask/JsonObject.h"
 
 #include "cppflask/html/parsers/simple/CommandVariablesParser.h"
-
+#include "cppflask/html/StringHelper.h"
+#include "cppflask/html/nodes/PipedVariableNode.h"
 
 namespace {
 
@@ -201,8 +203,18 @@ SetNode::~SetNode() = default;
 std::string SetNode::render(JsonObject& data) const {
 
     auto tempExpr = _expression;
-    parsers::simple::CommandVariablesParser{tempExpr}.parse(data);
 
+    if (tempExpr.at(0) == '$' && tempExpr.find('|') != std::string::npos) {
+        stripAll(tempExpr);
+        auto pipePos = tempExpr.find('|');
+        auto result = nodes::PipedVariableNode{tempExpr.substr(1, pipePos-1), tempExpr.substr(pipePos+1)}.render(data);
+        std::cout << result << std::endl;
+        data.set(_key, result);
+        std::cout << data.toString() << std::endl;
+        return {};
+    }
+
+    parsers::simple::CommandVariablesParser{tempExpr}.parse(data);
     if (!tempExpr.empty() && (tempExpr.front() == '"' || tempExpr.front() == '\'')) {
         data.set(_key, parseStringLiteral(tempExpr));
     } else {

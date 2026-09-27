@@ -2,6 +2,7 @@
 
 #include "cppflask/html/nodes/SetNode.h"
 #include "cppflask/JsonObject.h"
+#include "cppflask/html/FilterRegistry.h"
 
 namespace cppflask::html::nodes {
 
@@ -169,6 +170,35 @@ TEST_F(SetNodeTest, OrderOfOperations_AllVariablesAreSubstituted) {
     // Verify the value was set correctly
     auto value = data.getValue("x", 0UL);
     ASSERT_EQ(value, 9UL);
+}
+
+TEST_F(SetNodeTest, UsePipe_WithoutFilterResultsInSerialization) {
+
+    auto node = SetNode("x", "$array | getLength ");
+
+    data.set("array/0",1UL);
+    data.set("array/1",2UL);
+    data.set("array/2",3UL);
+    node.render(data);
+
+    // Verify the value was set correctly
+    auto value = data.getValueAsString("x");
+    ASSERT_EQ("[1,2,3]", value);
+}
+
+TEST_F(SetNodeTest, UsePipe_WithFilterRegisteredResultsInMethodBeingCalled) {
+
+    FilterRegistry::registerFilter("getLength", [](JsonObject& array) {
+        return std::to_string(array.getArraySize());
+    });
+
+    auto node = SetNode("x", "$array | getLength ");
+    data.set("array/0",std::string{"hello"});
+    data.set("array/1",std::string{"cpp"});
+    data.set("array/2",std::string{"flask"});
+    node.render(data);
+    auto value = data.getValueAsString("x");
+    ASSERT_EQ("3", value);
 }
 
 }

@@ -99,9 +99,7 @@ Thank you for understanding.
 
 ### Wishlist
 
-- Support filters in `set` command, for more programming flexibility, 
-  such as getting the length of an array, to then do something with.
-
+- Not sure yet what else is missing. Will need to build a bigger project with this now.
 
 ### Known issues
 
@@ -111,6 +109,7 @@ None yet. Please let me know if you encounter anything.
 
 - **0.5.0** TBD
   - Add `sort` function to JsonObject for arrays (including arrays of objects).
+  - Add filter support for the `set` command.
 
 - **0.4.1** 2026-09-26
   - Patched workflow file to use Ubuntu-26.04 because of C++23 requirement.
