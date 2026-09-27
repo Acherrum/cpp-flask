@@ -184,4 +184,52 @@ namespace cppflask {
         object.set("two", temp2);
         ASSERT_EQ("{\"one\":{\"nesting\":{\"some\":\"value\"}},\"two\":{\"hello\":\"world\"}}", object.toString());
     }
+
+    TEST_F(JsonObjectTest, SortArrayOfNumbers_Ascending) {
+        auto jsonArray = JsonObject{"[5,2,4,1,3]"};
+        jsonArray.sort();
+        ASSERT_EQ("[1,2,3,4,5]",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfObjectsByName_Ascending) {
+        auto jsonArray = JsonObject{R"([{"id":3,"name":"Barney"},{"id":1,"name":"Charles"},{"id":2,"name":"Abe"}])"};
+        jsonArray.sort(SortOrder::Ascending, "name");
+        ASSERT_EQ(R"([{"id":2,"name":"Abe"},{"id":3,"name":"Barney"},{"id":1,"name":"Charles"}])",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfObjectsByNumber_Ascending) {
+        auto jsonArray = JsonObject{R"([{"id":3,"name":"Barney"},{"id":1,"name":"Charles"},{"id":2,"name":"Abe"}])"};
+        jsonArray.sort(SortOrder::Ascending, "id");
+        ASSERT_EQ(R"([{"id":1,"name":"Charles"},{"id":2,"name":"Abe"},{"id":3,"name":"Barney"}])",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfBooleans_Ascending) {
+        auto jsonArray = JsonObject{R"([false,true,false,true])"};
+        jsonArray.sort();
+        ASSERT_EQ(R"([true,true,false,false])",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfNumbers_Descending) {
+        auto jsonArray = JsonObject{"[5,2,4,1,3]"};
+        jsonArray.sort(SortOrder::Descending);
+        ASSERT_EQ("[5,4,3,2,1]",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfObjectsByName_Descending) {
+        auto jsonArray = JsonObject{R"([{"id":3,"name":"Barney"},{"id":1,"name":"Charles"},{"id":2,"name":"Abe"}])"};
+        jsonArray.sort(SortOrder::Descending, "name");
+        ASSERT_EQ(R"([{"id":1,"name":"Charles"},{"id":3,"name":"Barney"},{"id":2,"name":"Abe"}])",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfObjectsByNumber_Descending) {
+        auto jsonArray = JsonObject{R"([{"id":3,"name":"Barney"},{"id":1,"name":"Charles"},{"id":2,"name":"Abe"}])"};
+        jsonArray.sort(SortOrder::Descending, "id");
+        ASSERT_EQ(R"([{"id":3,"name":"Barney"},{"id":2,"name":"Abe"},{"id":1,"name":"Charles"}])",jsonArray.toString());
+    }
+
+    TEST_F(JsonObjectTest, SortArrayOfBooleans_Descending) {
+        auto jsonArray = JsonObject{R"([false,true,false,true])"};
+        jsonArray.sort(SortOrder::Descending);
+        ASSERT_EQ(R"([false,false,true,true])",jsonArray.toString());
+    }
 }

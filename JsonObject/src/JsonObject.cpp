@@ -1,5 +1,7 @@
 #include "cppflask/JsonObject.h"
 
+#include <algorithm>
+
 #include "rapidjson/document.h"
 #include "rapidjson/pointer.h"
 #include "rapidjson/writer.h"
@@ -63,6 +65,24 @@ namespace {
     rapidjson::Value* getValuePointer(PImpl& object, const std::string &key) {
         return key.empty() ? &object.get() : rapidjson::GetValueByPointer(object.get(), parseKey(key));
     }
+
+    bool recursiveSortHelper(const rapidjson::Value& a, const rapidjson::Value& b, SortOrder order, const std::string& field) {
+        if (a.IsNumber() && b.IsNumber()) {
+            return order == SortOrder::Ascending ? a.GetDouble() < b.GetDouble() : a.GetDouble() > b.GetDouble();
+        }
+        if (a.IsString() && b.IsString()) {
+            auto tempA = std::string{a.GetString()};
+            auto tempB = std::string{b.GetString()};
+            return order == SortOrder::Ascending ? tempA < tempB : tempA > tempB;
+        }
+        if (a.IsBool() && b.IsBool()) {
+            return order == SortOrder::Ascending ? a.GetBool() > b.GetBool() : a.GetBool() < b.GetBool();
+        }
+        if (a.IsObject() && b.IsObject() && a.HasMember(field.c_str()) && b.HasMember(field.c_str())) {
+            return recursiveSortHelper(a[field.c_str()], b[field.c_str()], order, field);
+        }
+        return false;
+    }
 }
 
 JsonObject::JsonObject() : _pimpl{std::make_unique<PImpl>(std::make_unique<rapidjson::Document>())} {}
@@ -81,8 +101,7 @@ JsonObject& JsonObject::operator=(JsonObject&& other) noexcept {
     return *this;
 }
 
-std::string JsonObject::getValue(const std::string &key, const std::string &defaultReturnValue) const
-{
+std::string JsonObject::getValue(const std::string &key, const std::string &defaultReturnValue) const {
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr && value->IsString()) {
@@ -91,8 +110,7 @@ std::string JsonObject::getValue(const std::string &key, const std::string &defa
     return defaultReturnValue;
 }
 
-long JsonObject::getValue(const std::string &key, long defaultReturnValue) const
-{
+long JsonObject::getValue(const std::string &key, long defaultReturnValue) const {
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr && value->IsInt64()) {
@@ -101,8 +119,7 @@ long JsonObject::getValue(const std::string &key, long defaultReturnValue) const
     return defaultReturnValue;
 }
 
-unsigned long JsonObject::getValue(const std::string &key, unsigned long defaultReturnValue) const
-{
+unsigned long JsonObject::getValue(const std::string &key, unsigned long defaultReturnValue) const {
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr && value->IsUint64()) {
@@ -111,8 +128,17 @@ unsigned long JsonObject::getValue(const std::string &key, unsigned long default
     return defaultReturnValue;
 }
 
-double JsonObject::getValue(const std::string &key, double defaultReturnValue) const
-{
+unsigned long JsonObject::getValue(const std::string &key, unsigned long long defaultReturnValue) const {
+
+    auto value = getValuePointer(*_pimpl, key);
+
+    if (value != nullptr && value->IsUint64()) {
+        return value->GetUint64();
+    }
+    return defaultReturnValue;
+}
+
+double JsonObject::getValue(const std::string &key, double defaultReturnValue) const {
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr && value->IsNumber()) {
@@ -121,8 +147,7 @@ double JsonObject::getValue(const std::string &key, double defaultReturnValue) c
     return defaultReturnValue;
 }
 
-bool JsonObject::getValue(const std::string &key, bool defaultReturnValue) const
-{
+bool JsonObject::getValue(const std::string &key, bool defaultReturnValue) const {
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr && value->IsBool()) {
@@ -130,6 +155,7 @@ bool JsonObject::getValue(const std::string &key, bool defaultReturnValue) const
     }
     return defaultReturnValue;
 }
+
 JsonObject JsonObject::get(const std::string& key) const {
 
     auto value = getValuePointer(*_pimpl, key);
@@ -148,20 +174,24 @@ std::string JsonObject::toString() const
     return stringbuffer.GetString();
 }
 
-std::string JsonObject::getValueAsString(const std::string &key) const
-{
+std::string JsonObject::getValueAsString(const std::string &key) const {
+
     auto value = getValuePointer(*_pimpl, key);
 
     if (value != nullptr) {
         if (value->IsString()) {
             return value->GetString();
-        } else if (value->IsInt64()) {
+        }
+        if (value->IsInt64()) {
             return std::to_string(value->GetInt64());
-        } else if (value->IsUint64()) {
+        }
+        if (value->IsUint64()) {
             return std::to_string(value->GetUint64());
-        } else if (value->IsNumber()) {
+        }
+        if (value->IsNumber()) {
             return std::to_string(value->GetDouble());
-        } else if (value->IsBool()) {
+        }
+        if (value->IsBool()) {
             return (value->GetBool() ? "true" : "false");
         }
     }
@@ -248,5 +278,16 @@ bool JsonObject::isEmpty() const {
     }
 
     return _pimpl->get().IsNull();
+}
+
+
+void JsonObject::sort(SortOrder order, const std::string &field) {
+
+    if (_pimpl->get().IsArray()) {
+        std::sort(_pimpl->get().GetArray().Begin(), _pimpl->get().GetArray().End(),
+            [&](const rapidjson::Value& a, const rapidjson::Value& b) {
+                return recursiveSortHelper(a, b, order, field);
+        });
+    }
 }
 }

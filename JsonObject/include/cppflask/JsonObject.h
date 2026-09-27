@@ -7,6 +7,10 @@
 namespace cppflask {
 struct PImpl;
 
+enum class SortOrder {
+    Ascending, Descending
+};
+
 class JsonObject {
 public:
     JsonObject();
@@ -52,6 +56,8 @@ public:
     [[nodiscard]] bool hasMember(const std::string& key) const;
 
     [[nodiscard]] bool isEmpty() const;
+
+    void sort(SortOrder order = SortOrder::Ascending, const std::string& field = "");
 
 private:
     std::unique_ptr<PImpl> _pimpl{nullptr};
