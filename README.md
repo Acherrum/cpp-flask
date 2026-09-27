@@ -16,13 +16,16 @@ The internal libraries are
    - Offers a static `run` method to just make the server run with your router.
    - Offers `Router`, `Route` and `SimpleRoute` classes, to limit boilerplate code.
 2. HtmlBuilder
-   - Conditionals (`if`, `else if`, `else`).
-   - Loops (`for x to y`, `for el in list`).
-   - Variables (headers, cookies, path params, forms etc. all easily accessible via JSON URIs).
-   - Creating variables from within your HTML (`set`).
-   - Drop in other files for reusability (`include`).
-   - Extending other files for more convenient user interface design (`extends` and `block`).
-   - Use macros to create reusable and variable code blocks (`macro`).
+   - Low effort programmable HTML parsing.
+   - Automatic support for:
+     - Conditionals (`if`, `else if`, `else`).
+     - Loops (`for x to y`, `for el in list`).
+     - Variables (headers, cookies, path params, forms etc. all easily accessible via JSON URIs).
+     - User created filters to 'pipe' variables through.
+     - Creating variables from within your HTML (`set`).
+     - Drop in other files for reusability (`include`).
+     - Extending other files for more convenient user interface design (`extends` and `block`).
+     - Use macros to create reusable and variable code blocks (`macro`).
 3. JsonObject
    - A user-friendly wrapper-object around RapidJSON.
 
@@ -92,7 +95,13 @@ Although I do advocate TDD, I am still an engineer who likes to build as he goes
 This is a hobby project.
 For now, I will not accept any contributions.
 Feel free to fork, but this is, for the time being, something to keep myself busy.
-Thank you for understanding. 
+Thank you for understanding.
+
+### Wishlist
+
+- Support filters in `set` command, for more programming flexibility, 
+  such as getting the length of an array, to then do something with.
+
 
 ### Known issues
 
