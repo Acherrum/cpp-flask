@@ -99,7 +99,8 @@ Thank you for understanding.
 
 ### Wishlist
 
-- Not sure yet what else is missing. Will need to build a bigger project with this now.
+- Improved filter handling
+  - Additional arguments
 
 ### Known issues
 

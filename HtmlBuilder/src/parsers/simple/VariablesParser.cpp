@@ -20,7 +20,7 @@ std::pair<std::size_t, std::unique_ptr<nodes::BaseNode>> VariablesParser::parse(
     auto pipePos = fullVariable.find('|');
     if (pipePos != std::string::npos) {
         return {cmd.endPos, std::make_unique<nodes::PipedVariableNode>(
-            fullVariable.substr(1,pipePos-1), fullVariable.substr(pipePos+1))};
+            fullVariable.substr(1,pipePos-1), stripAll(fullVariable.substr(pipePos+1)))};
     }
     return {cmd.endPos, std::make_unique<nodes::VariableNode>(fullVariable.substr(1))};
 }

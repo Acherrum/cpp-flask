@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <cmath>
 #include <string>
-#include <iostream>
 
 #include "cppflask/JsonObject.h"
 
@@ -208,9 +207,7 @@ std::string SetNode::render(JsonObject& data) const {
         stripAll(tempExpr);
         auto pipePos = tempExpr.find('|');
         auto result = nodes::PipedVariableNode{tempExpr.substr(1, pipePos-1), tempExpr.substr(pipePos+1)}.render(data);
-        std::cout << result << std::endl;
         data.set(_key, result);
-        std::cout << data.toString() << std::endl;
         return {};
     }
 

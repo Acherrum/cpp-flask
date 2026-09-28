@@ -6,7 +6,6 @@
 #include <ranges>
 
 #include "cppflask/html/nodes/HtmlNode.h"
-#include "cppflask/html/nodes/MacroNode.h"
 #include "cppflask/html/HtmlCommand.h"
 #include "cppflask/html/StringHelper.h"
 #include "cppflask/html/parsers/MacroRegistry.h"

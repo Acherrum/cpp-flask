@@ -36,4 +36,32 @@ namespace cppflask::html::nodes {
         auto result = node->render(json);
         ASSERT_EQ("4", result);
     }
+
+    TEST_F(PipedVariableNodeTest, MultiPipeMagic) {
+
+        FilterRegistry::registerFilter("sortById", [](JsonObject& array) {
+            array.sort(SortOrder::Ascending, "id");
+            return array.toString();
+        });
+        FilterRegistry::registerFilter("getIdsBelow10", [](JsonObject& array) {
+            auto newArray = JsonObject{};
+            for (int i = 0, index = 0; i < array.getArraySize(); i++) {
+                if (array.getValue(std::to_string(i) + "/id", 0L) < 10) {
+                    newArray.set("/" + std::to_string(index), array.get(std::to_string(i)));
+                    index++;
+                } else {
+                    break;
+                }
+            }
+            return newArray.toString();
+        });
+
+        auto html = std::string{"{{ $test | sortById | getIdsBelow10 }}"};
+        auto command = HtmlCommand{html,0,html.length()};
+        auto [dontCare, node] = VariablesParser::parse(html, command);
+
+        auto json = JsonObject(R"raw({"test":[{"id":10,"name":"not this one"},{"id":2,"name":"this one too"},{"id":1,"name":"this one"},{"id":12,"name":"nor this one"}]})raw");
+        auto result = node->render(json);
+        ASSERT_EQ(R"([{"id":1,"name":"this one"},{"id":2,"name":"this one too"}])", result);
+    }
 }

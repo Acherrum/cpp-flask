@@ -194,6 +194,7 @@ std::string JsonObject::getValueAsString(const std::string &key) const {
         if (value->IsBool()) {
             return (value->GetBool() ? "true" : "false");
         }
+        return get(key).toString();
     }
     return {};
 }

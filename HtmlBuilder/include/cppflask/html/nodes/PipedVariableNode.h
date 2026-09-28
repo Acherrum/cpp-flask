@@ -9,13 +9,13 @@ namespace cppflask::html::nodes {
 
     class PipedVariableNode : public BaseNode {
     public:
-        PipedVariableNode(const std::string& var, const std::string& pipeMethod);
+        PipedVariableNode(const std::string& var, const std::string& pipeExpression);
 
         ~PipedVariableNode() override;
         std::string render(JsonObject& data) const override;
 
     private:
-        std::function<std::string(JsonObject&)> _pipeMethod;
+        std::vector<std::string> _pipeMethods;
     };
 
 }
