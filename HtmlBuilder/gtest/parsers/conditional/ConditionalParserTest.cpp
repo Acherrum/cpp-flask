@@ -32,6 +32,43 @@ TEST_F(ConditionalsParserTest, SimpleIfStatement_FALSE) {
     ASSERT_TRUE(result.empty());
 }
 
+TEST_F(ConditionalsParserTest, SimpleIfStatement_AbsentVariableIsFalse) {
+
+    auto [endOfData, node] = ConditionalsParser::parse(_html, _cmd);
+    ASSERT_EQ(endOfData, _html.length());
+    auto data = JsonObject{};
+    auto result = node->render(data);
+    ASSERT_TRUE(result.empty());
+}
+
+TEST_F(ConditionalsParserTest, SimpleIfStatement_AbsentStringVariableIsEmpty_ComparingNotEmptyIsFalse) {
+
+    std::string _command{"{% IF ($hello != "") %}"};
+    std::string _html{R"raw({% IF ($hello != "") %}hello{% END_IF %})raw"};
+    HtmlCommand _cmd{
+        _command, 0, _command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser::parse(_html, _cmd);
+    ASSERT_EQ(endOfData, _html.length());
+    auto data = JsonObject{};
+    auto result = node->render(data);
+    ASSERT_TRUE(result.empty());
+}
+
+TEST_F(ConditionalsParserTest, SimpleIfStatement_AbsentStringVariableIsEmpty_ComparingEmptyIsTrue) {
+
+    std::string command{"{% IF ($hello == \"\") %}"};
+    std::string html{R"raw({% IF ($hello == "") %}hello{% END_IF %})raw"};
+    HtmlCommand cmd{
+        command, 0, command.length()
+    };
+    auto [endOfData, node] = ConditionalsParser::parse(html, cmd);
+    ASSERT_EQ(endOfData, html.length());
+    auto data = JsonObject{};
+    auto result = node->render(data);
+    ASSERT_EQ("hello", result);
+}
+
 TEST_F(ConditionalsParserTest, IfElseIfWithAndLogic_AAndB) {
     auto command = std::string{"{% IF ($a AND $b) %}"};
     auto html = std::string{"{% IF ($a AND $b) %}a and b{% ELSE IF ($a) %}only a{% ELSE IF ($b) %}only b{% ELSE %}neither{% END_IF %}"};
@@ -109,7 +146,6 @@ TEST_F(ConditionalsParserTest, IfElseWithAndLogic_FalsePath_ShortCircuit) {
     auto result = node->render(data);
     ASSERT_EQ("false", result);
 }
-
 
 TEST_F(ConditionalsParserTest, IfElseWithAndLogic_FalsePath) {
     auto command = std::string{"{% IF ($text != \"\" AND $first == $second) %}"};

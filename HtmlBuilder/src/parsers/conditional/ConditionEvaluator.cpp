@@ -27,20 +27,25 @@ bool ConditionEvaluator::evaluate(const JsonObject& data) const {
         return (NOT ? !result : result);
     }
 
-    auto literalCompare = (_expression.left.at(0) != '$' || _expression.right.at(0) != '$');
+    auto literalCompare = (_expression.left.empty() || _expression.left.at(0) != '$' ||
+                                _expression.right.empty() || _expression.right.at(0) != '$');
 
     auto left = _expression.left;
     auto right = _expression.right;
     if (literalCompare) {
-        if (left.at(0) == '$') {
-            left = data.getValueAsString(left.substr(1));
-        } else if (left.at(0) == '"' || left.at(0) == '\'') {
-            left = left.substr(1, left.length()-2);
+        if (!left.empty()) {
+            if (left.at(0) == '$') {
+                left = data.getValueAsString(left.substr(1));
+            } else if (left.at(0) == '"' || left.at(0) == '\'') {
+                left = left.substr(1, left.length()-2);
+            }
         }
-        if (right.at(0) == '$') {
-            right = data.getValueAsString(right.substr(1));
-        } else if (right.at(0) == '"' || right.at(0) == '\'') {
-            right = right.substr(1, right.length()-2);
+        if (!right.empty()) {
+            if (right.at(0) == '$') {
+                right = data.getValueAsString(right.substr(1));
+            } else if (right.at(0) == '"' || right.at(0) == '\'') {
+                right = right.substr(1, right.length()-2);
+            }
         }
 
         try {

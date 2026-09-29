@@ -101,6 +101,7 @@ Thank you for understanding.
 
 - Improved filter handling
   - Additional arguments
+- Easy way to redirect to a different route.
 
 ### Known issues
 
@@ -112,6 +113,7 @@ None yet. Please let me know if you encounter anything.
   - Add `sort` function to JsonObject for arrays (including arrays of objects).
   - Add filter support for the `set` command.
   - Add filter chaining.
+  - Small fix for empty string comparisson in if-statements.
 
 - **0.4.1** 2026-09-26
   - Patched workflow file to use Ubuntu-26.04 because of C++23 requirement.
