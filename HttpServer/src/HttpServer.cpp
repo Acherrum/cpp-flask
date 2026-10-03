@@ -1,12 +1,12 @@
 #include "cppflask/HttpServer.h"
 
-#include <iostream>
 #include <csignal>
 
 #include "httplib/httplib.h"
 
 #include "cppflask/IRoute.h"
 #include "cppflask/JsonObject.h"
+#include "cppflask/Logger.h"
 
 namespace {
 
@@ -120,7 +120,8 @@ void setUpRoutes(httplib::Server& server, const cppflask::IRouter& router, const
 
 namespace cppflask {
     HttpServer::HttpServer(IRouter& router) :
-        _server{std::make_unique<httplib::Server>()} {
+        _server{std::make_unique<httplib::Server>()},
+        _logger{std::make_unique<Logger>("HttpServer")} {
 
         router.setStopCommand([&]{ stop(); });
         setUpRoutes(*_server, router);
@@ -134,19 +135,19 @@ namespace cppflask {
     void HttpServer::start(int port) {
 
         _port = port;
-        std::cout << "Starting @ localhost:" << std::to_string(port) << std::endl;
+        _logger->log(LogLevel::Info, "Starting @ localhost:" + std::to_string(port));
         _serverThread = std::thread(&HttpServer::listen, this);
     }
 
     void HttpServer::stop() {
 
         if (_isStarted) {
-            std::cout << "Stopping server" << std::endl;
+            _logger->log(LogLevel::Info, "Stopping server");
             _server->stop();
             _serverThread.join();
             _isStarted = false;
             _stopSignal.set_value();
-            std::cout << "Stopped" << std::endl;
+            _logger->log(LogLevel::Debug, "Stopped");
         }
     }
 
@@ -165,14 +166,13 @@ namespace cppflask {
         static HttpServer server{router};
 
         auto catchSignal = [](int sig) {
-            std::cout << "[signal] Caught interrupt: " << std::to_string(sig) << std::endl;
+            server._logger->log(LogLevel::Debug, "[signal] Caught interrupt: " + std::to_string(sig));
             server.stop();
         };
 
         std::signal(SIGINT, catchSignal);
         std::signal(SIGTERM, catchSignal);
 
-        std::cout << "Starting the server." << std::endl;
         server.start();
 
         auto promise = server.getStopSignal();
@@ -182,7 +182,7 @@ namespace cppflask {
     void HttpServer::listen() {
 
         _isStarted = true;
-        std::cout << "Listening" << std::endl;
+        _logger->log(LogLevel::Debug, "Listening");
         _server->listen("0.0.0.0", _port);
     }
 }

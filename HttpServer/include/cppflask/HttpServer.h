@@ -7,6 +7,7 @@
 namespace httplib { class Server; }
 
 namespace cppflask {
+    class Logger;
     class IRouter;
 
     class HttpServer {
@@ -29,6 +30,7 @@ namespace cppflask {
 
     private:
         std::unique_ptr<httplib::Server> _server;
+        std::unique_ptr<Logger> _logger;
         std::thread _serverThread{};
         bool _isStarted{false};
         int _port{80};
