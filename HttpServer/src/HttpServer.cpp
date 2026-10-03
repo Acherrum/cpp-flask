@@ -128,9 +128,7 @@ namespace cppflask {
 
     HttpServer::~HttpServer() {
 
-        if (_isStarted) {
-            _server->stop();
-        }
+        _server->stop();
     }
 
     void HttpServer::start(int port) {
@@ -142,12 +140,14 @@ namespace cppflask {
 
     void HttpServer::stop() {
 
-        std::cout << "Stopping server" << std::endl;
-        _server->stop();
-        _serverThread.join();
-        _isStarted = false;
-        _stopSignal.set_value();
-        std::cout << "Stopped" << std::endl;
+        if (_isStarted) {
+            std::cout << "Stopping server" << std::endl;
+            _server->stop();
+            _serverThread.join();
+            _isStarted = false;
+            _stopSignal.set_value();
+            std::cout << "Stopped" << std::endl;
+        }
     }
 
     bool HttpServer::isRunning() const {
