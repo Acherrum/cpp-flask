@@ -206,8 +206,13 @@ std::string SetNode::render(JsonObject& data) const {
     if (tempExpr.at(0) == '$' && tempExpr.find('|') != std::string::npos) {
         stripAll(tempExpr);
         auto pipePos = tempExpr.find('|');
-        auto result = nodes::PipedVariableNode{tempExpr.substr(1, pipePos-1), tempExpr.substr(pipePos+1)}.render(data);
-        data.set(_key, result);
+        auto result = PipedVariableNode{tempExpr.substr(1, pipePos-1), tempExpr.substr(pipePos+1)}.render(data);
+        auto parsedObject = JsonObject{result};
+        if (parsedObject.hasMember("error")) {
+            data.set(_key, result);
+        } else {
+            data.set(_key, parsedObject);
+        }
         return {};
     }
 
@@ -226,5 +231,10 @@ std::string SetNode::render(JsonObject& data) const {
         }
     }
     return {};
+}
+
+void SetNode::trySetJsonObject(JsonObject& data, const std::string& text) const {
+
+
 }
 }

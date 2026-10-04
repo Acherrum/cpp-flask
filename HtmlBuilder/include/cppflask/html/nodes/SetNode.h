@@ -19,6 +19,8 @@ namespace cppflask {
         private:
             std::string _key;
             std::string _expression;
+
+            void trySetJsonObject(JsonObject& data, const std::string& text) const;
         };
 
     }

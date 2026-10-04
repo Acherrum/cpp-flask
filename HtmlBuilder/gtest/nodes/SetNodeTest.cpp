@@ -200,4 +200,22 @@ TEST_F(SetNodeTest, MultiPipeMagic) {
     ASSERT_EQ(R"([{"id":10,"name":"not this one"},{"id":2,"name":"this one too"},{"id":1,"name":"this one"},{"id":12,"name":"nor this one"}])", json.getValueAsString("test"));
 }
 
+TEST_F(SetNodeTest, UsePipe_AllowsSettingArrays) {
+
+    FilterRegistry::registerFilter("keys", [](JsonObject& array) {
+        return array.getKeys().toString();
+    });
+
+    auto node = SetNode("x", "$object | keys ");
+    data.set("object/hello",1UL);
+    data.set("object/cpp",2UL);
+    data.set("object/flask",3UL);
+    node.render(data);
+
+    ASSERT_EQ("hello", data.getValueAsString("x/0"));
+    ASSERT_EQ("cpp", data.getValueAsString("x/1"));
+    ASSERT_EQ("flask", data.getValueAsString("x/2"));
+    ASSERT_EQ(R"({"hello":1,"cpp":2,"flask":3})", data.getValueAsString("object"));
+}
+
 }
