@@ -23,6 +23,21 @@ namespace cppflask {
         ASSERT_EQ("two", object.getValue("hello/world/1", std::string{}));
     }
 
+    TEST_F(JsonObjectTest, GetKeys) {
+
+        auto object = JsonObject(R"raw({"hello": {"world": ["one", "two", "three"], "other": true }})raw");
+        auto expectedKeys = JsonObject{R"(["hello"])"};
+        ASSERT_EQ(expectedKeys, object.getKeys());
+    }
+
+    TEST_F(JsonObjectTest, StreamOperator) {
+
+        auto object = JsonObject(R"raw({"hello":["world","!!"]})raw");
+        std::stringstream ss;
+        ss << object;
+        ASSERT_EQ(R"raw({"hello":["world","!!"]})raw", ss.str());
+    }
+
     TEST_F(JsonObjectTest, AddLongValue) {
 
         auto object = JsonObject(R"raw({})raw");

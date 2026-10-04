@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <ostream>
 
 namespace cppflask {
 struct PImpl;
@@ -61,7 +62,13 @@ public:
 
     void sort(SortOrder order = SortOrder::Ascending, const std::string& field = "");
 
+    bool operator==(const JsonObject& other) const;
+    bool operator!=(const JsonObject& other) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const cppflask::JsonObject& obj);
+
 private:
     std::unique_ptr<PImpl> _pimpl{nullptr};
 };
 }
+

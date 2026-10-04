@@ -278,11 +278,17 @@ void JsonObject::set(const std::string &key, const JsonObject &object) {
 }
 
 JsonObject JsonObject::getKeys(const std::string& key) const {
+    auto result = JsonObject{"[]"};
     auto value = getValuePointer(*_pimpl, key);
     if (value->IsObject()) {
-        
-        return ;
+        const auto& obj = value->GetObject();
+        int i = 0;
+        for (const auto& [key, val] : obj) {
+            result.set(std::to_string(i), key.GetString());
+            i++;
+        }
     }
+    return std::move(result);
 }
 
 bool JsonObject::hasMember(const std::string &key) const {
@@ -311,5 +317,21 @@ void JsonObject::sort(SortOrder order, const std::string &field) {
                 return recursiveSortHelper(a, b, order, field);
         });
     }
+}
+
+bool JsonObject::operator==(const JsonObject &other) const {
+
+    return toString() == other.toString();
+}
+
+bool JsonObject::operator!=(const JsonObject &other) const {
+
+    return !(*this == other);
+}
+
+std::ostream& operator<<(std::ostream &out, const cppflask::JsonObject &obj) {
+    
+    out << obj.toString();
+    return out;
 }
 }
