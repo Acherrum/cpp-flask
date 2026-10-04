@@ -115,6 +115,7 @@ None yet. Please let me know if you encounter anything.
   - Add filter chaining.
   - Small fix for empty string comparisson in if-statements.
   - Add light-weight logger class.
+  - Added `getSize` method to JsonObject, which also supports objects and strings, to replace `getArraySize`.
 
 - **0.4.1** 2026-09-26
   - Patched workflow file to use Ubuntu-26.04 because of C++23 requirement.
