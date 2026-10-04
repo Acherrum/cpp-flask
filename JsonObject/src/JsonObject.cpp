@@ -277,6 +277,14 @@ void JsonObject::set(const std::string &key, const JsonObject &object) {
     setMember(*_pimpl, key, object._pimpl->get());
 }
 
+JsonObject JsonObject::getKeys(const std::string& key) const {
+    auto value = getValuePointer(*_pimpl, key);
+    if (value->IsObject()) {
+        
+        return ;
+    }
+}
+
 bool JsonObject::hasMember(const std::string &key) const {
 
     return _pimpl->get().IsObject() && _pimpl->get().HasMember(key.c_str());
