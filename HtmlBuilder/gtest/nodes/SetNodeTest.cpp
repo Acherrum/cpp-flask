@@ -153,6 +153,7 @@ TEST_F(SetNodeTest, UsePipe_WithoutFilterResultsInSerialization) {
     node.render(data);
 
     ASSERT_EQ("[1,2,3]", data.getValueAsString("x"));
+    ASSERT_EQ("[1,2,3]", data.getValueAsString("array"));
 }
 
 TEST_F(SetNodeTest, UsePipe_WithFilterRegisteredResultsInMethodBeingCalled) {
@@ -168,6 +169,7 @@ TEST_F(SetNodeTest, UsePipe_WithFilterRegisteredResultsInMethodBeingCalled) {
     node.render(data);
 
     ASSERT_EQ("3", data.getValueAsString("x"));
+    ASSERT_EQ(R"(["hello","cpp","flask"])", data.getValueAsString("array"));
 }
 
 TEST_F(SetNodeTest, MultiPipeMagic) {
@@ -195,6 +197,7 @@ TEST_F(SetNodeTest, MultiPipeMagic) {
 
     ASSERT_TRUE(result.empty());
     ASSERT_EQ(R"([{"id":1,"name":"this one"},{"id":2,"name":"this one too"}])", json.getValueAsString("x"));
+    ASSERT_EQ(R"([{"id":10,"name":"not this one"},{"id":2,"name":"this one too"},{"id":1,"name":"this one"},{"id":12,"name":"nor this one"}])", json.getValueAsString("test"));
 }
 
 }

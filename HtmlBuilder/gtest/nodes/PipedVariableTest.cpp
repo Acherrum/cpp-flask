@@ -63,5 +63,6 @@ namespace cppflask::html::nodes {
         auto json = JsonObject(R"raw({"test":[{"id":10,"name":"not this one"},{"id":2,"name":"this one too"},{"id":1,"name":"this one"},{"id":12,"name":"nor this one"}]})raw");
         auto result = node->render(json);
         ASSERT_EQ(R"([{"id":1,"name":"this one"},{"id":2,"name":"this one too"}])", result);
+        ASSERT_EQ(R"([{"id":10,"name":"not this one"},{"id":2,"name":"this one too"},{"id":1,"name":"this one"},{"id":12,"name":"nor this one"}])", json.get("test").toString());
     }
 }

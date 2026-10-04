@@ -1,6 +1,6 @@
 #include "cppflask/html/nodes/PipedVariableNode.h"
 
-#include <iostream>
+#include <chrono>
 #include <ranges>
 
 #include "cppflask/html/FilterRegistry.h"
@@ -16,15 +16,18 @@ PipedVariableNode::~PipedVariableNode() = default;
 
 std::string PipedVariableNode::render(JsonObject &data) const {
 
+    auto timestamp = std::chrono::system_clock::now().time_since_epoch().count();
+    auto jsonKey = _html + "_" + std::to_string(timestamp);
+    data.set(jsonKey, data.get(_html));
     for (const auto& pipeMethod : _pipeMethods) {
-        auto var = data.get(_html);
+        auto var = data.get(jsonKey);
         auto result = JsonObject{FilterRegistry::getFilter(pipeMethod)(var)};
         if (result.hasMember("error")) {
-            data.set(_html, result.getValueAsString("input"));
+            data.set(jsonKey, result.getValueAsString("input"));
         } else {
-            data.set(_html, result);
+            data.set(jsonKey, result);
         }
     }
-    return data.getValueAsString(_html);
+    return data.getValueAsString(jsonKey);
 }
 }

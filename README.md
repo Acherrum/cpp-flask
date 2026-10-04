@@ -117,6 +117,7 @@ None yet. Please let me know if you encounter anything.
   - Add light-weight logger class.
   - Add `getSize` method to JsonObject, which also supports objects and strings, to replace `getArraySize`.
   - Add `getKeys` and `operator<<` to JsonObject.
+  - Fix bug in pipe handling (filters), that caused original data to be overwritten.
 
 - **0.4.1** 2026-09-26
   - Patched workflow file to use Ubuntu-26.04 because of C++23 requirement.
