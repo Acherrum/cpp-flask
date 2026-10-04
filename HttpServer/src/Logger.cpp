@@ -88,7 +88,7 @@ void Logger::log(LogLevel level, const std::string& text) const {
              std::chrono::system_clock::now()
            );
         auto time = std::format("{:%F %T}", now);
-        ss << std::left << std::setw(25) << time << std::left << std::setw(10) << level << std::left << std::setw(15) << _name << " " << std::left << text << "\n";
+        ss << std::left << std::setw(25) << time << std::left << std::setw(10) << level << std::left << std::setw(50) << _name << " " << std::left << text << "\n";
         Logging::log(ss.str());
     }
 }
