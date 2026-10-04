@@ -35,7 +35,8 @@ public:
 
     [[nodiscard]] std::string getValueAsString(const std::string& key) const;
 
-    [[nodiscard]] std::size_t getArraySize(const std::string& key = "") const;
+    [[deprecated("Use getSize() instead")]] [[nodiscard]] std::size_t getArraySize(const std::string& key = "") const;
+    [[nodiscard]] std::size_t getSize(const std::string& key = "") const;
 
     bool compareKeys(const std::string& key1, const std::string& key,
                      const std::function<bool(double,double)>& numericComp,

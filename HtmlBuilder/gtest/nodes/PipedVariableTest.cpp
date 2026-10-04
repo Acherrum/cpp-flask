@@ -25,7 +25,7 @@ namespace cppflask::html::nodes {
     TEST_F(PipedVariableNodeTest, RegisteredFilterIsProperlyCalled) {
 
         FilterRegistry::registerFilter("getArrayLength", [](JsonObject& array) {
-            return std::to_string(array.getArraySize());
+            return std::to_string(array.getSize());
         });
 
         auto html = std::string{"{{ $test | getArrayLength }}"};
@@ -45,7 +45,7 @@ namespace cppflask::html::nodes {
         });
         FilterRegistry::registerFilter("getIdsBelow10", [](JsonObject& array) {
             auto newArray = JsonObject{};
-            for (int i = 0, index = 0; i < array.getArraySize(); i++) {
+            for (int i = 0, index = 0; i < array.getSize(); i++) {
                 if (array.getValue(std::to_string(i) + "/id", 0L) < 10) {
                     newArray.set("/" + std::to_string(index), array.get(std::to_string(i)));
                     index++;

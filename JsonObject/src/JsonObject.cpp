@@ -201,10 +201,23 @@ std::string JsonObject::getValueAsString(const std::string &key) const {
 
 std::size_t JsonObject::getArraySize(const std::string& key) const {
 
+    return getSize(key);
+}
+
+std::size_t JsonObject::getSize(const std::string& key) const {
+
     auto value = getValuePointer(*_pimpl, key);
     if (value != nullptr && value->IsArray()) {
-        auto ar = value->GetArray();
+        const auto& ar = value->GetArray();
         return ar.Size();
+    }
+    if (value != nullptr && value->IsObject()) {
+        const auto& ar = value->GetObject();
+        return ar.MemberCount();
+    }
+    if (value != nullptr && value->IsString()) {
+        auto ar = std::string{value->GetString()};
+        return ar.length();
     }
     return 0;
 }

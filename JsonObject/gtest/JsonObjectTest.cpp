@@ -84,7 +84,7 @@ namespace cppflask {
         const auto object = JsonObject(R"raw({"nested":[{"id":1},{"id":2},{"id":3}]})raw");
         {
             auto array = object.get("nested");
-            for (long i = 0; i < array.getArraySize(); i++) {
+            for (long i = 0; i < array.getSize(); i++) {
                 auto nested = array.get(std::to_string(i));
                 nested.set(std::string{"index"}, i);
             }
@@ -100,6 +100,26 @@ namespace cppflask {
     TEST_F(JsonObjectTest, EmptyArray) {
         const auto object = JsonObject("[]");
         ASSERT_TRUE(object.isEmpty());
+    }
+
+    TEST_F(JsonObjectTest, GetSize_Object) {
+        const auto object = JsonObject(R"({"a":1,"b":2,"c":3,"d":4})");
+        ASSERT_EQ(4, object.getSize());
+    }
+
+    TEST_F(JsonObjectTest, GetSize_Array) {
+        const auto object = JsonObject("[1,2,3]");
+        ASSERT_EQ(3, object.getSize());
+    }
+
+    TEST_F(JsonObjectTest, GetSize_String) {
+        const auto object = JsonObject("\"Hello, World!\"");
+        ASSERT_EQ(13, object.getSize());
+    }
+
+    TEST_F(JsonObjectTest, GetSize_Int) {
+        const auto object = JsonObject("42");
+        ASSERT_EQ(0, object.getSize());
     }
 
     TEST_F(JsonObjectTest, AddObject) {
@@ -146,9 +166,9 @@ namespace cppflask {
 
     TEST_F(JsonObjectTest, ClearArrayUsingSetMethod) {
         auto object = JsonObject(R"raw({"nested":[1,2,3,4]})raw");
-        ASSERT_EQ(4, object.getArraySize("nested"));
+        ASSERT_EQ(4, object.getSize("nested"));
         object.set("nested", JsonObject("[]"));
-        ASSERT_EQ(0, object.getArraySize("nested"));
+        ASSERT_EQ(0, object.getSize("nested"));
         ASSERT_EQ(R"raw({"nested":[]})raw", object.toString());
     }
 

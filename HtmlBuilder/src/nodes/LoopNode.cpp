@@ -57,7 +57,7 @@ long long LoopNode::getLoopStart(JsonObject& data) const {
 
 long long LoopNode::getLoopEnd(JsonObject &data) const {
     if (!_settings.dataVar.empty()) {
-        return static_cast<long long>(data.getArraySize(_settings.dataVar));
+        return static_cast<long long>(data.getSize(_settings.dataVar));
     }
 
     if (_settings.end.empty()) {

@@ -158,7 +158,7 @@ TEST_F(SetNodeTest, UsePipe_WithoutFilterResultsInSerialization) {
 TEST_F(SetNodeTest, UsePipe_WithFilterRegisteredResultsInMethodBeingCalled) {
 
     FilterRegistry::registerFilter("getLength", [](JsonObject& array) {
-        return std::to_string(array.getArraySize());
+        return std::to_string(array.getSize());
     });
 
     auto node = SetNode("x", "$array | getLength ");
@@ -178,7 +178,7 @@ TEST_F(SetNodeTest, MultiPipeMagic) {
     });
     FilterRegistry::registerFilter("getIdsBelow10", [](JsonObject& array) {
         auto newArray = JsonObject{};
-        for (int i = 0, index = 0; i < array.getArraySize(); i++) {
+        for (int i = 0, index = 0; i < array.getSize(); i++) {
             if (array.getValue(std::to_string(i) + "/id", 0L) < 10) {
                 newArray.set("/" + std::to_string(index), array.get(std::to_string(i)));
                 index++;
