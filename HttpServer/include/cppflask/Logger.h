@@ -34,7 +34,13 @@ public:
     explicit Logger(const std::string& name);
     ~Logger();
 
-    void log(LogLevel level, const std::string& ss) const;
+    void log(LogLevel level, const std::string& text) const;
+
+    void trace(const std::string& text) const;
+    void debug(const std::string& text) const;
+    void warning(const std::string& text) const;
+    void info(const std::string& text) const;
+    void error(const std::string& text) const;
 
 private:
     std::string _name;

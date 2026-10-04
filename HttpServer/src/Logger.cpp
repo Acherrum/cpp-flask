@@ -92,4 +92,29 @@ void Logger::log(LogLevel level, const std::string& text) const {
         Logging::log(ss.str());
     }
 }
+
+void Logger::trace(const std::string &text) const {
+
+    log(LogLevel::Trace, text);
+}
+
+void Logger::debug(const std::string &text) const {
+
+    log(LogLevel::Debug, text);
+}
+
+void Logger::warning(const std::string &text) const {
+
+    log(LogLevel::Warning, text);
+}
+
+void Logger::info(const std::string &text) const {
+
+    log(LogLevel::Info, text);
+}
+
+void Logger::error(const std::string &text) const {
+
+    log(LogLevel::Error, text);
+}
 }
